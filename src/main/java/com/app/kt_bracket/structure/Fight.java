@@ -9,6 +9,7 @@ public class Fight
 
     private int number;
     private Coordinates numberCoordinates;
+    private Decoration decoration;
 
 
     public Fight() {  }
@@ -79,8 +80,29 @@ public class Fight
         return numberCoordinates;
     }
 
+    public void setNumberCoordinates(Coordinates numberCoordinates)
+    {
+        this.numberCoordinates = numberCoordinates;
+    }
+
+    public Decoration getDecoration()
+    {
+        return decoration;
+    }
+
+    public void setDecoration(Decoration decoration)
+    {
+        this.decoration = decoration;
+    }
+
     public boolean isComplete()
     {
         return !shiro.isEmpty() && !aka.isEmpty();
+    }
+
+    @Override
+    public String toString()
+    {
+        return shiro.getFullName() + "\n\t\t\t" + winner.getFullName() + "\n" + aka.getFullName();
     }
 }

@@ -22,6 +22,13 @@ public class Competitor
         this.coordinates = coordinates;
     }
 
+    public Competitor(Competitor competitor)
+    {
+        this.fullName = competitor.fullName;
+        this.startNumber = competitor.startNumber;
+        this.coordinates = new Coordinates(competitor.coordinates.getX(), competitor.coordinates.getY());
+    }
+
     public String getFullName()
     {
         return fullName;

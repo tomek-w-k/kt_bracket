@@ -5,7 +5,9 @@ import com.app.kt_bracket.structure.*;
 
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -14,6 +16,8 @@ import java.util.stream.IntStream;
 @Component
 public class BracketBuilder
 {
+    private static final int THE_LOWEST_COLUMN = 0;
+    private static final int FIRST_COLUMN = 1;
     private final int winnerHorizontalDistance = 3;
 
     private Category category;
@@ -29,14 +33,83 @@ public class BracketBuilder
                 .reverseOrderOfCompleted()
                 .buildTheLowestColumn()
                 .buildRestOfColumns()
-                .assignCoordinatesForFirstColumn()
+                .assignCoordinatesTheLowestColumn()
                 .assignCoordinatesToRestOfColumns()
+                .removeIncompleteFights()
+                .assignCoordinatesForFightNumber()
+                .decorate()
                 .get();
     }
 
     private Bracket get()
     {
         return bracket;
+    }
+
+    private BracketBuilder decorate()
+    {
+        IntStream.iterate(0, col -> ++col)
+            .limit(bracket.getColumns().size())
+            .forEach(col -> {
+                bracket.getColumns().get(col).getFights().stream()
+                    .forEach(fight -> {
+                        Coordinates shiroHorizontalLine = new Coordinates(fight.getShiro().getCoordinates().getX() + 1, fight.getShiro().getCoordinates().getY());
+                        Coordinates upRightCorner = new Coordinates(fight.getShiro().getCoordinates().getX() + 2, fight.getShiro().getCoordinates().getY());
+                        Coordinates tJunction = new Coordinates(fight.getWinner().getCoordinates().getX() - 1, fight.getWinner().getCoordinates().getY());
+                        Coordinates downRightCorner = new Coordinates(fight.getAka().getCoordinates().getX() + 2, fight.getAka().getCoordinates().getY());
+                        Coordinates akaHorizontalLine = new Coordinates(fight.getAka().getCoordinates().getX() + 1, fight.getAka().getCoordinates().getY());
+
+                        List<Coordinates> winnerTopVerticalLines = new ArrayList<>();
+                        List<Coordinates> winnerBottomVerticalLines = new ArrayList<>();
+                        IntStream.iterate(1, row -> ++row)
+                            .limit((int) Math.pow(2, col) - 1)
+                            .forEach(row -> {
+                                winnerTopVerticalLines.add(new Coordinates(fight.getShiro().getCoordinates().getX() + 2,
+                                        fight.getShiro().getCoordinates().getY() + row));
+                                winnerBottomVerticalLines.add(new Coordinates(fight.getAka().getCoordinates().getX() + 2,
+                                        fight.getAka().getCoordinates().getY() - row));
+                            });
+                        fight.setDecoration(new Decoration( shiroHorizontalLine, upRightCorner, winnerTopVerticalLines,
+                                                            tJunction,
+                                                            winnerBottomVerticalLines, downRightCorner, akaHorizontalLine ));
+                    });
+            });
+
+        return this;
+    }
+
+    private BracketBuilder assignCoordinatesForFightNumber()
+    {
+        bracket.getColumns().stream()
+            .forEach(column -> {
+                column.getFights().stream()
+                    .forEach(fight -> {
+                        Coordinates winnerCoordinates = fight.getWinner().getCoordinates();
+                        fight.setNumberCoordinates(new Coordinates( winnerCoordinates.getX() - 2, winnerCoordinates.getY() ));
+                    });
+            });
+
+        return this;
+    }
+
+    private BracketBuilder removeIncompleteFights()
+    {
+        AtomicInteger theLowestColumnFightPos = new AtomicInteger(0);
+
+        bracket.getColumns().get(FIRST_COLUMN).getFights().stream()
+            .forEach(fight -> {
+                Fight firstTheLowestColumnFight = bracket.getColumns().get(THE_LOWEST_COLUMN).getFights().get(theLowestColumnFightPos.getAndIncrement());
+                Fight secondTheLowestColumnFight = bracket.getColumns().get(THE_LOWEST_COLUMN).getFights().get(theLowestColumnFightPos.getAndIncrement());
+
+                if ( !firstTheLowestColumnFight.isComplete() )
+                    fight.setShiro( new Competitor(fight.getShiro()) );
+                if ( !secondTheLowestColumnFight.isComplete() )
+                    fight.setAka( new Competitor(fight.getAka()) );
+            });
+
+        bracket.getColumns().get(THE_LOWEST_COLUMN).getFights().removeIf(fight -> !fight.isComplete());
+
+        return this;
     }
 
     private BracketBuilder assignCoordinatesToRestOfColumns()
@@ -66,7 +139,7 @@ public class BracketBuilder
         return this;
     }
 
-    private BracketBuilder assignCoordinatesForFirstColumn()
+    private BracketBuilder assignCoordinatesTheLowestColumn()
     {
         final int winnerVerticalDistance = 1;
         AtomicInteger row = new AtomicInteger(0);
@@ -99,13 +172,14 @@ public class BracketBuilder
         IntStream.iterate(ladderSize/4, numberOfFights -> numberOfFights/2)
                  .limit(numberOfColumns - 1) // because the the lowest column is already built
                  .forEach(numberOfFights -> { // iterate and create columns here
-                     bracket.getColumns().add( new BracketColumn( IntStream.iterate(0, prevColFightPos -> prevColFightPos + 2)
-                         .limit(numberOfFights)
-                         .mapToObj(prevColFightPos -> { // iterate and create fights for column here
-                             return new Fight(bracket.getColumns().get(prevCol.get()).getFights().get(prevColFightPos).getWinner(),
-                                              bracket.getColumns().get(prevCol.get()).getFights().get(prevColFightPos+1).getWinner(),
-                                              new Competitor("###############") );
-                         }).collect(Collectors.toList())) );
+                     bracket.getColumns().add( new BracketColumn(
+                        IntStream.iterate(0, prevColFightPos -> prevColFightPos + 2)
+                                 .limit(numberOfFights)
+                                 .mapToObj(prevColFightPos -> { // iterate and create fights for column here
+                                     return new Fight(bracket.getColumns().get(prevCol.get()).getFights().get(prevColFightPos).getWinner(),
+                                                      bracket.getColumns().get(prevCol.get()).getFights().get(prevColFightPos+1).getWinner(),
+                                                      new Competitor("###############") );
+                                 }).collect(Collectors.toList())) );
                      prevCol.getAndIncrement();
                  });
 
