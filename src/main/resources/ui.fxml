@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.SeparatorMenuItem?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="960.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.kt_bracket.ui_controller.MainUIController">
+<BorderPane prefHeight="960.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.kt_bracket.ui_controller.MainUIController">
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
@@ -18,38 +27,86 @@
               <menus>
                 <Menu mnemonicParsing="false" text="File">
                   <items>
-                        <MenuItem fx:id="loadMenuItem" mnemonicParsing="false" onAction="#loadMenuItemAction" text="Load..." />
-                    <MenuItem mnemonicParsing="false" text="Close" />
+                        <MenuItem fx:id="importCategoryMenuItem" mnemonicParsing="false" onAction="#importCategoryItemAction" text="Import category..." />
+                        <MenuItem fx:id="importCategoriesMenuItem" mnemonicParsing="false" onAction="#importCategoriesItemAction" text="Import categories..." />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem fx:id="closeMenuItem" mnemonicParsing="false" text="Close" />
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Edit">
+                <Menu mnemonicParsing="false" text="Shuffle">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="Delete" />
+                    <MenuItem fx:id="shuffleSelectedMenuItem" mnemonicParsing="false" text="Shuffle selected" />
+                        <MenuItem fx:id="shuffleAllMenuItem" mnemonicParsing="false" text="Shuffle all" />
                   </items>
                 </Menu>
+                  <Menu mnemonicParsing="false" text="Number">
+                    <items>
+                      <MenuItem fx:id="numberAllMenuItem" mnemonicParsing="false" text="Number all" />
+                    </items>
+                  </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                   <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
+                        <MenuItem fx:id="manualMenuItem" mnemonicParsing="false" text="Manual" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" text="About" />
                   </items>
                 </Menu>
               </menus>
             </MenuBar>
+            <ToolBar prefHeight="40.0" prefWidth="200.0">
+              <items>
+                <Button fx:id="importCategoryButton" mnemonicParsing="false" text="Import category" />
+                  <Button fx:id="importCategoriesButton" mnemonicParsing="false" text="importCategories" />
+                  <Separator orientation="VERTICAL" />
+                  <Button fx:id="shuffleSelectedButton" mnemonicParsing="false" text="Shuffle selected" />
+                  <Button fx:id="shuffleAllButton" mnemonicParsing="false" text="Shuffle all" />
+                  <Separator orientation="VERTICAL" />
+                  <Button fx:id="numberAllButton" mnemonicParsing="false" text="Number all" />
+              </items>
+            </ToolBar>
          </children>
       </VBox>
    </top>
    <center>
-      <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <content>
-            <GridPane fx:id="bracketGridPane" gridLinesVisible="true">
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" />
-              </rowConstraints>
-            </GridPane>
-         </content>
-      </ScrollPane>
+      <SplitPane dividerPositions="0.29797979797979796" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <TreeTableView prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                    <columns>
+                      <TreeTableColumn prefWidth="223.0" text="Category" />
+                      <TreeTableColumn minWidth="0.0" prefWidth="151.0" text="Full name" />
+                    </columns>
+                  </TreeTableView>
+               </children>
+            </AnchorPane>
+            <VBox>
+               <children>
+                  <AnchorPane>
+                     <children>
+                        <Label prefHeight="25.0" text="Label" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                     </children>
+                  </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" VBox.vgrow="ALWAYS">
+                     <children>
+                        <ScrollPane layoutX="250.0" layoutY="241.0" minHeight="0.0" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                           <content>
+                              <GridPane fx:id="bracketGridPane" gridLinesVisible="true" prefHeight="209.0" prefWidth="272.0">
+                                <columnConstraints>
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" />
+                                </rowConstraints>
+                              </GridPane>
+                           </content>
+                        </ScrollPane>
+                     </children>
+                  </AnchorPane>
+               </children>
+            </VBox>
+        </items>
+      </SplitPane>
    </center>
 </BorderPane>
