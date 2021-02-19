@@ -1,6 +1,7 @@
 package com.app.kt_bracket.structure;
 
 import java.util.List;
+import java.util.Optional;
 
 
 public class Mat
@@ -15,6 +16,13 @@ public class Mat
     public Mat(List<Bracket> brackets)
     {
         this.brackets = brackets;
+    }
+
+    public Optional<Bracket> findBracketByCategoryName(String categoryName)
+    {
+        return brackets.stream()
+            .filter(bracket -> bracket.getCategoryName() == categoryName)
+            .reduce((u, v) -> {throw new IllegalStateException(""); });
     }
 
     public List<Bracket> getBrackets()

@@ -2,35 +2,31 @@ package com.app.kt_bracket.ui_controller;
 
 import com.app.kt_bracket.data.Category;
 import com.app.kt_bracket.drawing.BracketDrawer;
+import com.app.kt_bracket.drawing.CategoryListDrawer;
 import com.app.kt_bracket.logic.BracketBuilder;
 import com.app.kt_bracket.logic.CategoryBuilder;
 import com.app.kt_bracket.structure.Bracket;
+import com.app.kt_bracket.structure.Competitor;
+import com.app.kt_bracket.structure.Mat;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.HPos;
-import javafx.geometry.VPos;
-import javafx.scene.Group;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Polyline;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeType;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.swing.*;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 
 @Component
@@ -45,17 +41,40 @@ public class MainUIController
     @Autowired
     BracketDrawer bracketDrawer;
 
+    @Autowired
+    CategoryListDrawer categoryListDrawer;
+
     @FXML
     GridPane bracketGridPane;
 
     @FXML
-    public Button importCategoryButton;
+    private Button importCategoryButton;
+
+    @FXML
+    private TreeTableView<Competitor> categoriesTreeTableView;
+
+    @FXML
+    private TreeTableColumn categoryColumn;
+
+    private TreeItem categoriesRootItem = new TreeItem();
+
+    List<Category> categories = new ArrayList<>();
+    Mat mat;
 
 
     @FXML
     public void initialize()
     {
+        try {
+            categoryColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("fullName"));
+        }
+        catch(NullPointerException e) { e.printStackTrace(); }
+        catch(IllegalStateException e) { e.printStackTrace(); }
 
+        categoriesTreeTableView.getSelectionModel().selectedItemProperty().addListener((observableValue, competitorTreeItem, t1) -> {
+            mat.findBracketByCategoryName( t1.getValue().getFullName() )
+                .ifPresent(bracket -> bracketDrawer.draw( bracket, bracketGridPane ));
+        });
     }
 
     public void importCategoryItemAction(ActionEvent actionEvent)
@@ -93,8 +112,7 @@ public class MainUIController
         catch(FileNotFoundException e) { e.printStackTrace(); }
         catch(IOException e) { e.printStackTrace(); }
 
-        Category category = categoryBuilder.build(competitorStringsList, fileWithCategory.getName());
-
+        Category category = categoryBuilder.build(competitorStringsList, new SimpleStringProperty(fileWithCategory.getName()));
 
         Bracket bracket = bracketBuilder.build(category);
         bracketDrawer.draw(bracket, bracketGridPane);
@@ -102,7 +120,56 @@ public class MainUIController
 
     public void importCategoriesItemAction(ActionEvent actionEvent)
     {
-        
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+
+        if ( System.getProperty("os.name").contains("Linux") )
+            directoryChooser.setInitialDirectory(new File("/home/ubuntu/pliki_robocze/"));
+        if ( System.getProperty("os.name").contains("Windows") )
+            directoryChooser.setInitialDirectory(new File("C:\\Users"));
+
+        File directoryWithCategories = directoryChooser.showDialog(null);
+
+
+        if ( directoryWithCategories == null ) return;
+
+        Arrays.asList(directoryWithCategories.listFiles()).stream()
+            .forEach(file -> {
+                try {
+                    FileReader fileReader = new FileReader(file);
+                    BufferedReader bufferedReader = new BufferedReader(fileReader);
+                    List<Competitor> competitors = new ArrayList<>();
+
+                    String line = null;
+                    while ( (line = bufferedReader.readLine()) != null )
+                    {
+                        String[] parts = line.trim().split("\\s+");
+                        if ( parts.length > 0 )
+                        {
+                            String person = parts[0];
+                            if ( parts.length > 1 )
+                                person = person + " " + parts[1];
+
+                            competitors.add(new Competitor(person));
+                        }
+                    }
+                    Category category = new Category(competitors);
+                    category.setName(file.getName());
+                    categories.add(category);
+                }
+                catch(FileNotFoundException e) { e.printStackTrace(); }
+                catch(IOException e) { e.printStackTrace(); }
+            });
+
+        categoryListDrawer.draw(categories, categoriesRootItem);
+        categoriesRootItem.setExpanded(true);
+        categoriesTreeTableView.setRoot(categoriesRootItem);
+    }
+
+    public void shuffleAllItemAction(ActionEvent actionEvent)
+    {
+         mat = new Mat(categories.stream()
+            .map(category -> bracketBuilder.build(category)).collect(Collectors.toList()));
+
 
     }
 }

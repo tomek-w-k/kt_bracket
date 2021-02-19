@@ -1,13 +1,15 @@
 package com.app.kt_bracket.data;
 
 import com.app.kt_bracket.structure.Competitor;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import java.util.List;
 
 
 public class Category
 {
     List<Competitor> competitorList;
-    String name;
+    StringProperty name;
 
 
     public Category() {  }
@@ -17,10 +19,16 @@ public class Category
         this.competitorList = competitorList;
     }
 
-    public Category(List<Competitor> competitorList, String name)
+    public Category(List<Competitor> competitorList, StringProperty name)
     {
         this.competitorList = competitorList;
         this.name = name;
+    }
+
+    public Category(List<Competitor> competitorList, String name)
+    {
+        this.competitorList = competitorList;
+        this.name = new SimpleStringProperty(name);
     }
 
     public List<Competitor> getCompetitorList()
@@ -33,13 +41,23 @@ public class Category
         this.competitorList = competitorList;
     }
 
-    public String getName()
+    public StringProperty nameProperty()
     {
         return name;
     }
 
-    public void setName(String name)
+    public String getName()
+    {
+        return name.get();
+    }
+
+    public void setNameProperty(StringProperty name)
     {
         this.name = name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = new SimpleStringProperty(name);
     }
 }

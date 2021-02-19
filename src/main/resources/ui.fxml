@@ -36,7 +36,7 @@
                 <Menu mnemonicParsing="false" text="Shuffle">
                   <items>
                     <MenuItem fx:id="shuffleSelectedMenuItem" mnemonicParsing="false" text="Shuffle selected" />
-                        <MenuItem fx:id="shuffleAllMenuItem" mnemonicParsing="false" text="Shuffle all" />
+                        <MenuItem fx:id="shuffleAllMenuItem" mnemonicParsing="false" onAction="#shuffleAllItemAction" text="Shuffle all" />
                   </items>
                 </Menu>
                   <Menu mnemonicParsing="false" text="Number">
@@ -55,11 +55,11 @@
             </MenuBar>
             <ToolBar prefHeight="40.0" prefWidth="200.0">
               <items>
-                <Button fx:id="importCategoryButton" mnemonicParsing="false" text="Import category" />
-                  <Button fx:id="importCategoriesButton" mnemonicParsing="false" text="importCategories" />
+                <Button fx:id="importCategoryButton" mnemonicParsing="false" onAction="#importCategoryItemAction" text="Import category" />
+                  <Button fx:id="importCategoriesButton" mnemonicParsing="false" onAction="#importCategoriesItemAction" text="Import categories" />
                   <Separator orientation="VERTICAL" />
                   <Button fx:id="shuffleSelectedButton" mnemonicParsing="false" text="Shuffle selected" />
-                  <Button fx:id="shuffleAllButton" mnemonicParsing="false" text="Shuffle all" />
+                  <Button fx:id="shuffleAllButton" mnemonicParsing="false" onAction="#shuffleAllItemAction" text="Shuffle all" />
                   <Separator orientation="VERTICAL" />
                   <Button fx:id="numberAllButton" mnemonicParsing="false" text="Number all" />
               </items>
@@ -68,14 +68,13 @@
       </VBox>
    </top>
    <center>
-      <SplitPane dividerPositions="0.29797979797979796" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <SplitPane dividerPositions="0.17918622848200313" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <TreeTableView prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <TreeTableView fx:id="categoriesTreeTableView" showRoot="false" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <columns>
-                      <TreeTableColumn prefWidth="223.0" text="Category" />
-                      <TreeTableColumn minWidth="0.0" prefWidth="151.0" text="Full name" />
+                      <TreeTableColumn fx:id="categoryColumn" editable="false" prefWidth="223.0" sortable="false" text="Category" />
                     </columns>
                   </TreeTableView>
                </children>

@@ -38,12 +38,19 @@ public class BracketBuilder
                 .removeIncompleteFights()
                 .assignCoordinatesForFightNumber()
                 .decorate()
+                .assignCategoryName()
                 .get();
     }
 
     private Bracket get()
     {
         return bracket;
+    }
+
+    private BracketBuilder assignCategoryName()
+    {
+        bracket.setCategoryName(category.getName());
+        return this;
     }
 
     private BracketBuilder decorate()
