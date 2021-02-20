@@ -5,6 +5,7 @@ import com.app.kt_bracket.drawing.BracketDrawer;
 import com.app.kt_bracket.drawing.CategoryListDrawer;
 import com.app.kt_bracket.logic.BracketBuilder;
 import com.app.kt_bracket.logic.CategoryBuilder;
+import com.app.kt_bracket.logic.Numberer;
 import com.app.kt_bracket.structure.Bracket;
 import com.app.kt_bracket.structure.Competitor;
 import com.app.kt_bracket.structure.Mat;
@@ -22,10 +23,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -44,6 +42,9 @@ public class MainUIController
     @Autowired
     CategoryListDrawer categoryListDrawer;
 
+    @Autowired
+    Numberer numberer;
+
     @FXML
     GridPane bracketGridPane;
 
@@ -56,11 +57,9 @@ public class MainUIController
     @FXML
     private TreeTableColumn categoryColumn;
 
-    private TreeItem categoriesRootItem = new TreeItem();
-
     List<Category> categories = new ArrayList<>();
     Mat mat;
-
+    double bracketGridPaneScale = 1;
 
     @FXML
     public void initialize()
@@ -72,8 +71,17 @@ public class MainUIController
         catch(IllegalStateException e) { e.printStackTrace(); }
 
         categoriesTreeTableView.getSelectionModel().selectedItemProperty().addListener((observableValue, competitorTreeItem, t1) -> {
-            mat.findBracketByCategoryName( t1.getValue().getFullName() )
-                .ifPresent(bracket -> bracketDrawer.draw( bracket, bracketGridPane ));
+            if ( mat != null )
+            {
+                mat.findBracketByCategoryName( t1.getValue().getFullName() )
+                        .ifPresent(bracket -> bracketDrawer.draw( bracket, bracketGridPane ));
+
+                this.bracketGridPaneScale = 1;
+                this.bracketGridPane.setScaleX(this.bracketGridPaneScale);
+                this.bracketGridPane.setScaleY(this.bracketGridPaneScale);
+                bracketGridPane.setTranslateX( ((this.bracketGridPane.getWidth() - this.bracketGridPane.getWidth() * bracketGridPaneScale) / 2)  * -1 );
+                bracketGridPane.setTranslateY( ((this.bracketGridPane.getHeight() - this.bracketGridPane.getHeight() * bracketGridPaneScale) / 2)   * -1 );
+            }
         });
     }
 
@@ -160,16 +168,38 @@ public class MainUIController
                 catch(IOException e) { e.printStackTrace(); }
             });
 
-        categoryListDrawer.draw(categories, categoriesRootItem);
-        categoriesRootItem.setExpanded(true);
-        categoriesTreeTableView.setRoot(categoriesRootItem);
+        categoryListDrawer.draw(categories, categoriesTreeTableView);
     }
 
     public void shuffleAllItemAction(ActionEvent actionEvent)
     {
          mat = new Mat(categories.stream()
             .map(category -> bracketBuilder.build(category)).collect(Collectors.toList()));
+    }
 
+    public void numberAllItemAction(ActionEvent actionEvent)
+    {
+        numberer.number(mat);
+        categoryListDrawer.drawSortedAfterNumbering(categories, mat, categoriesTreeTableView);
+    }
 
+    public void zoomInItemAction(ActionEvent actionEvent)
+    {
+        bracketGridPaneScale = bracketGridPaneScale + 0.05;
+        this.bracketGridPane.setScaleX(this.bracketGridPaneScale);
+        this.bracketGridPane.setScaleY(this.bracketGridPaneScale);
+
+        bracketGridPane.setTranslateX( ((this.bracketGridPane.getWidth() - this.bracketGridPane.getWidth() * bracketGridPaneScale) / 2)  * -1 );
+        bracketGridPane.setTranslateY( ((this.bracketGridPane.getHeight() - this.bracketGridPane.getHeight() * bracketGridPaneScale) / 2)  * -1 );
+    }
+
+    public void zoomOutItemAction(ActionEvent actionEvent)
+    {
+        bracketGridPaneScale = bracketGridPaneScale - 0.05;
+        this.bracketGridPane.setScaleX(this.bracketGridPaneScale);
+        this.bracketGridPane.setScaleY(this.bracketGridPaneScale);
+
+        bracketGridPane.setTranslateX( ((this.bracketGridPane.getWidth() - this.bracketGridPane.getWidth() * bracketGridPaneScale) / 2)  * -1 );
+        bracketGridPane.setTranslateY( ((this.bracketGridPane.getHeight() - this.bracketGridPane.getHeight() * bracketGridPaneScale) / 2)   * -1 );
     }
 }

@@ -8,6 +8,7 @@ public class Bracket
 {
     List<BracketColumn> columns;
     String categoryName;
+    int numberOfCompetitors;
 
 
     public Bracket()
@@ -44,5 +45,15 @@ public class Bracket
     public void setCategoryName(String categoryName)
     {
         this.categoryName = categoryName;
+    }
+
+    public int getNumberOfCompetitors()
+    {
+        return numberOfCompetitors;
+    }
+
+    public void setNumberOfCompetitors(int numberOfCompetitors)
+    {
+        this.numberOfCompetitors = numberOfCompetitors;
     }
 }

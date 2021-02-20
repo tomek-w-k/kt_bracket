@@ -52,7 +52,7 @@ public class BracketDrawer
 
                 bracketGridPane.getColumnConstraints().get(fight.getNumberCoordinates().getX()).setPrefWidth(50);
                 bracketGridPane.getColumnConstraints().get(fight.getNumberCoordinates().getX() + 1).setPrefWidth(50);
-                Label labelNumber = new Label("##");
+                Label labelNumber = new Label(String.valueOf(fight.getNumber()));
                 labelNumber.setStyle("-fx-background-color: lightgray; -fx-border-color: black");
                 AnchorPane numberAnchorPane = new AnchorPane(labelNumber);
                 AnchorPane.setTopAnchor(labelNumber, .00);
@@ -147,7 +147,7 @@ public class BracketDrawer
 
                         bracketGridPane.getColumnConstraints().get(fight.getNumberCoordinates().getX()).setPrefWidth(50);
                         bracketGridPane.getColumnConstraints().get(fight.getNumberCoordinates().getX() + 1).setPrefWidth(50);
-                        Label labelNumber = new Label("##");
+                        Label labelNumber = new Label(String.valueOf(fight.getNumber()));
                         labelNumber.setStyle("-fx-background-color: lightgray; -fx-border-color: black");
                         AnchorPane numberAnchorPane = new AnchorPane(labelNumber);
                         AnchorPane.setTopAnchor(labelNumber, .00);

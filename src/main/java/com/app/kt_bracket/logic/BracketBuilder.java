@@ -29,8 +29,9 @@ public class BracketBuilder
     {
         this.category = category;
 
-        return completeToPowerOfTwo()
-                .reverseOrderOfCompleted()
+        return create()
+                .completeToPowerOfTwo()
+                //.reverseOrderOfCompleted()
                 .buildTheLowestColumn()
                 .buildRestOfColumns()
                 .assignCoordinatesTheLowestColumn()
@@ -168,7 +169,6 @@ public class BracketBuilder
 
     private BracketBuilder buildRestOfColumns()
     {
-        this.bracket = new Bracket();
         bracket.getColumns().add(this.theLowestColumn);
 
         int numberOfColumns = (int)(Math.log(this.category.getCompetitorList().size()) / Math.log(2));
@@ -203,12 +203,11 @@ public class BracketBuilder
                                                                         category.getCompetitorList().get(i),
                                                                         new Competitor("###############"))) );
 
-        // Re-write Competitors of incomplete fights as their winners
         this.theLowestColumn.getFights()
                 .forEach(fight -> {
-                    if ( fight.getAka().isEmpty() ) {
-                        fight.setWinner(fight.getShiro());
-                        fight.setShiro(new Competitor("###############"));
+                    if ( fight.getShiro().isEmpty() ) {
+                        fight.setWinner(fight.getAka());
+                        fight.setAka(new Competitor("###############"));
                     }
                 });
 
@@ -243,5 +242,12 @@ public class BracketBuilder
         }
 
         return powerResult;
+    }
+
+    private BracketBuilder create()
+    {
+        this.bracket = new Bracket();
+        this.bracket.setNumberOfCompetitors(this.category.getCompetitorList().size());
+        return this;
     }
 }
