@@ -30,8 +30,8 @@ public class BracketBuilder
         this.category = category;
 
         return create()
+                .shuffle()
                 .completeToPowerOfTwo()
-                //.reverseOrderOfCompleted()
                 .buildTheLowestColumn()
                 .buildRestOfColumns()
                 .assignCoordinatesTheLowestColumn()
@@ -242,6 +242,12 @@ public class BracketBuilder
         }
 
         return powerResult;
+    }
+
+    private BracketBuilder shuffle()
+    {
+        Collections.shuffle(this.category.getCompetitorList());
+        return this;
     }
 
     private BracketBuilder create()
