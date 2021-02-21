@@ -3,6 +3,7 @@ package com.app.kt_bracket.ui_controller;
 import com.app.kt_bracket.data.Category;
 import com.app.kt_bracket.drawing.BracketDrawer;
 import com.app.kt_bracket.drawing.CategoryListDrawer;
+import com.app.kt_bracket.exporters.SpreadsheetExporter;
 import com.app.kt_bracket.logic.BracketBuilder;
 import com.app.kt_bracket.logic.CategoryBuilder;
 import com.app.kt_bracket.logic.Numberer;
@@ -41,6 +42,9 @@ public class MainUIController
 
     @Autowired
     CategoryListDrawer categoryListDrawer;
+
+    @Autowired
+    SpreadsheetExporter spreadsheetExporter;
 
     @Autowired
     Numberer numberer;
@@ -201,5 +205,10 @@ public class MainUIController
 
         bracketGridPane.setTranslateX( ((this.bracketGridPane.getWidth() - this.bracketGridPane.getWidth() * bracketGridPaneScale) / 2)  * -1 );
         bracketGridPane.setTranslateY( ((this.bracketGridPane.getHeight() - this.bracketGridPane.getHeight() * bracketGridPaneScale) / 2)   * -1 );
+    }
+
+    public void exportItemAction(ActionEvent actionEvent)
+    {
+        spreadsheetExporter.exportToXlsx(this.mat);
     }
 }

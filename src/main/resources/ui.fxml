@@ -30,6 +30,8 @@
                         <MenuItem fx:id="importCategoryMenuItem" mnemonicParsing="false" onAction="#importCategoryItemAction" text="Import category..." />
                         <MenuItem fx:id="importCategoriesMenuItem" mnemonicParsing="false" onAction="#importCategoriesItemAction" text="Import categories..." />
                         <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="exportMenuItem" mnemonicParsing="false" onAction="#exportItemAction" text="Export..." />
+                        <SeparatorMenuItem mnemonicParsing="false" />
                     <MenuItem fx:id="closeMenuItem" mnemonicParsing="false" text="Close" />
                   </items>
                 </Menu>
@@ -57,6 +59,8 @@
               <items>
                 <Button fx:id="importCategoryButton" mnemonicParsing="false" onAction="#importCategoryItemAction" text="Import category" />
                   <Button fx:id="importCategoriesButton" mnemonicParsing="false" onAction="#importCategoriesItemAction" text="Import categories" />
+                  <Separator orientation="VERTICAL" />
+                  <Button fx:id="exportButton" mnemonicParsing="false" onAction="#exportItemAction" text="Export..." />
                   <Separator orientation="VERTICAL" />
                   <Button fx:id="shuffleSelectedButton" mnemonicParsing="false" text="Shuffle selected" />
                   <Button fx:id="shuffleAllButton" mnemonicParsing="false" onAction="#shuffleAllItemAction" text="Shuffle all" />
