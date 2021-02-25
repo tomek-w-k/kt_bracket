@@ -185,7 +185,8 @@ public class BracketBuilder
                                  .mapToObj(prevColFightPos -> { // iterate and create fights for column here
                                      return new Fight(bracket.getColumns().get(prevCol.get()).getFights().get(prevColFightPos).getWinner(),
                                                       bracket.getColumns().get(prevCol.get()).getFights().get(prevColFightPos+1).getWinner(),
-                                                      new Competitor("###############") );
+//                                                      new Competitor("###############") );
+                                                      new Competitor("") );
                                  }).collect(Collectors.toList())) );
                      prevCol.getAndIncrement();
                  });
@@ -201,13 +202,15 @@ public class BracketBuilder
                 .limit(category.getCompetitorList().size() / 2)
                 .forEach(i -> theLowestColumn.getFights().add(new Fight(category.getCompetitorList().get(i-1),
                                                                         category.getCompetitorList().get(i),
-                                                                        new Competitor("###############"))) );
+//                                                                        new Competitor("###############"))) );
+                                                                        new Competitor(""))) );
 
         this.theLowestColumn.getFights()
                 .forEach(fight -> {
                     if ( fight.getShiro().isEmpty() ) {
                         fight.setWinner(fight.getAka());
-                        fight.setAka(new Competitor("###############"));
+//                        fight.setAka(new Competitor("###############"));
+                        fight.setAka(new Competitor(""));
                     }
                 });
 
@@ -225,7 +228,8 @@ public class BracketBuilder
         int freePlaces = determineSize() - this.category.getCompetitorList().size();
         IntStream.iterate(0, i -> i + 2 )
                 .limit(freePlaces)
-                .forEach(i -> category.getCompetitorList().add(i, new Competitor("###############")) );
+//                .forEach(i -> category.getCompetitorList().add(i, new Competitor("###############")) );
+                .forEach(i -> category.getCompetitorList().add(i, new Competitor("")) );
 
         return this;
     }

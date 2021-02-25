@@ -98,6 +98,7 @@ public class Competitor
 
     public boolean isEmpty()
     {
-        return fullName.get() == "###############";
+        //return fullName.get() == "###############";
+        return fullName.get().isEmpty();
     }
 }
