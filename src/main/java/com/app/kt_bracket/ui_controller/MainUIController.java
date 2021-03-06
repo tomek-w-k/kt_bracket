@@ -141,11 +141,12 @@ public class MainUIController
 
         File directoryWithCategories = directoryChooser.showDialog(null);
 
-
         if ( directoryWithCategories == null ) return;
 
         Arrays.asList(directoryWithCategories.listFiles()).stream()
             .forEach(file -> {
+                if ( file.isDirectory() ) return;
+
                 try {
                     FileReader fileReader = new FileReader(file);
                     BufferedReader bufferedReader = new BufferedReader(fileReader);
