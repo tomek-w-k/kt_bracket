@@ -104,16 +104,17 @@ public class BracketBuilder
     {
         AtomicInteger theLowestColumnFightPos = new AtomicInteger(0);
 
-        bracket.getColumns().get(FIRST_COLUMN).getFights().stream()
-            .forEach(fight -> {
-                Fight firstTheLowestColumnFight = bracket.getColumns().get(THE_LOWEST_COLUMN).getFights().get(theLowestColumnFightPos.getAndIncrement());
-                Fight secondTheLowestColumnFight = bracket.getColumns().get(THE_LOWEST_COLUMN).getFights().get(theLowestColumnFightPos.getAndIncrement());
+        if ( bracket.getColumns().size() > 1 )
+            bracket.getColumns().get(FIRST_COLUMN).getFights().stream()
+                .forEach(fight -> {
+                    Fight firstTheLowestColumnFight = bracket.getColumns().get(THE_LOWEST_COLUMN).getFights().get(theLowestColumnFightPos.getAndIncrement());
+                    Fight secondTheLowestColumnFight = bracket.getColumns().get(THE_LOWEST_COLUMN).getFights().get(theLowestColumnFightPos.getAndIncrement());
 
-                if ( !firstTheLowestColumnFight.isComplete() )
-                    fight.setShiro( new Competitor(fight.getShiro()) );
-                if ( !secondTheLowestColumnFight.isComplete() )
-                    fight.setAka( new Competitor(fight.getAka()) );
-            });
+                    if ( !firstTheLowestColumnFight.isComplete() )
+                        fight.setShiro( new Competitor(fight.getShiro()) );
+                    if ( !secondTheLowestColumnFight.isComplete() )
+                        fight.setAka( new Competitor(fight.getAka()) );
+                });
 
         bracket.getColumns().get(THE_LOWEST_COLUMN).getFights().removeIf(fight -> !fight.isComplete());
 

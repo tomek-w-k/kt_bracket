@@ -161,12 +161,17 @@ public class MainUIController
                             if ( parts.length > 1 )
                                 person = person + " " + parts[1];
 
-                            competitors.add(new Competitor(person));
+                            if ( !person.isBlank() )
+                                competitors.add(new Competitor(person));
                         }
                     }
-                    Category category = new Category(competitors);
-                    category.setName(file.getName());
-                    categories.add(category);
+
+                    if ( competitors.size() > 1 )
+                    {
+                        Category category = new Category(competitors);
+                        category.setName(file.getName());
+                        categories.add(category);
+                    }
                 }
                 catch(FileNotFoundException e) { e.printStackTrace(); }
                 catch(IOException e) { e.printStackTrace(); }

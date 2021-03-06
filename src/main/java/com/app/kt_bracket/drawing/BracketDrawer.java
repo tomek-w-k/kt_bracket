@@ -24,17 +24,19 @@ public class BracketDrawer
         bracketGridPane.getColumnConstraints().clear();
         bracketGridPane.getRowConstraints().clear();
 
-        IntStream.iterate(0, row -> ++row)
-            .limit(bracket.getColumns().get(1).getFights().size() * 8)
-            .forEach(row -> {
-                bracketGridPane.getRowConstraints().add(row, new RowConstraints(25));
-            });
+        if ( bracket.getColumns().size() > 1 )
+            IntStream.iterate(0, row -> ++row)
+                .limit(bracket.getColumns().get(1).getFights().size() * 8)
+                .forEach(row -> bracketGridPane.getRowConstraints().add(row, new RowConstraints(25)));
+        else
+            IntStream.iterate(0, row -> ++row)
+                .limit(3)
+                .forEach(row -> bracketGridPane.getRowConstraints().add(row, new RowConstraints(25)));
 
         IntStream.iterate(0, col -> ++col)
             .limit(bracket.getColumns().get( bracket.getColumns().size() -1 ).getFights().get(0).getWinner().getCoordinates().getX() + 1)
             .forEach(col -> {
                 ColumnConstraints c = new ColumnConstraints(200);
-
                 c.setFillWidth(true);
                 bracketGridPane.getColumnConstraints().add(col, c);
             });
