@@ -10,8 +10,11 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.control.TreeTableColumn?>
 <?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -27,29 +30,85 @@
               <menus>
                 <Menu mnemonicParsing="false" text="File">
                   <items>
-                        <MenuItem fx:id="importCategoryMenuItem" mnemonicParsing="false" onAction="#importCategoryItemAction" text="Import category..." />
-                        <MenuItem fx:id="importCategoriesMenuItem" mnemonicParsing="false" onAction="#importCategoriesItemAction" text="Import categories..." />
+                        <MenuItem fx:id="importCategoryMenuItem" mnemonicParsing="false" onAction="#importCategoryItemAction" text="Import category...">
+                           <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/import-file-24.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
+                        <MenuItem fx:id="importCategoriesMenuItem" mnemonicParsing="false" onAction="#importCategoriesItemAction" text="Import categories...">
+                           <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/import-from-folder-24.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="exportMenuItem" mnemonicParsing="false" onAction="#exportItemAction" text="Export..." />
+                        <MenuItem fx:id="exportMenuItem" mnemonicParsing="false" onAction="#exportItemAction" text="Export to XLS...">
+                           <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/xls-export-24.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false" />
                     <MenuItem fx:id="closeMenuItem" mnemonicParsing="false" onAction="#closeItemAction" text="Close" />
                   </items>
                 </Menu>
                   <Menu mnemonicParsing="false" text="Category">
                     <items>
-                      <MenuItem fx:id="removeSelectedCategoryMenuItem" mnemonicParsing="false" onAction="#removeSelectedCategoryItemAction" text="Remove selected" />
-                        <MenuItem fx:id="clearAllMenuItem" mnemonicParsing="false" onAction="#clearAllItemAction" text="Clear all" />
+                      <MenuItem fx:id="removeSelectedCategoryMenuItem" mnemonicParsing="false" onAction="#removeSelectedCategoryItemAction" text="Remove selected">
+                           <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/delete-category-24.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
+                        <MenuItem fx:id="clearAllMenuItem" mnemonicParsing="false" onAction="#clearAllItemAction" text="Clear all">
+                           <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/clear-all-24.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
                     </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="Build">
                     <items>
-                      <MenuItem fx:id="buildAllMenuItem" mnemonicParsing="false" onAction="#buildAllItemAction" text="Build all" />
+                      <MenuItem fx:id="buildAllMenuItem" mnemonicParsing="false" onAction="#buildAllItemAction" text="Build all">
+                           <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/build-24.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
                     </items>
                   </Menu>
                   <Menu mnemonicParsing="false" text="View">
                     <items>
-                      <MenuItem fx:id="zoomInMenuItem" mnemonicParsing="false" onAction="#zoomInItemAction" text="Zoom in" />
-                        <MenuItem fx:id="zoomOutMenuItem" mnemonicParsing="false" onAction="#zoomOutItemAction" text="Zoom out" />
+                      <MenuItem fx:id="zoomInMenuItem" mnemonicParsing="false" onAction="#zoomInItemAction" text="Zoom in">
+                           <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/zoom-in-24.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
+                        <MenuItem fx:id="zoomOutMenuItem" mnemonicParsing="false" onAction="#zoomOutItemAction" text="Zoom out">
+                           <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/zoom-out-24.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
                     </items>
                   </Menu>
                 <Menu mnemonicParsing="false" text="Help">
@@ -61,19 +120,99 @@
                 </Menu>
               </menus>
             </MenuBar>
-            <ToolBar prefHeight="40.0" prefWidth="200.0">
+            <ToolBar style="-fx-background-color: #EAEAEA;">
               <items>
-                <Button fx:id="importCategoryButton" mnemonicParsing="false" onAction="#importCategoryItemAction" text="Import category" />
-                  <Button fx:id="importCategoriesButton" mnemonicParsing="false" onAction="#importCategoriesItemAction" text="Import categories" />
-                  <Button fx:id="exportButton" mnemonicParsing="false" onAction="#exportItemAction" text="Export..." />
-                  <Separator orientation="VERTICAL" />
-                  <Button fx:id="removeSelectedCategoryButton" mnemonicParsing="false" onAction="#removeSelectedCategoryItemAction" text="Remove category" />
-                  <Button fx:id="clearAllButton" mnemonicParsing="false" onAction="#clearAllItemAction" text="Clear all" />
-                  <Separator orientation="VERTICAL" prefHeight="28.0" prefWidth="0.0" />
-                  <Button fx:id="buildAllButton" mnemonicParsing="false" onAction="#buildAllItemAction" text="Build all" />
-                  <Separator orientation="VERTICAL" />
-                  <Button fx:id="zoomInButton" mnemonicParsing="false" onAction="#zoomInItemAction" text="Zoom in" />
-                  <Button fx:id="zoomOut" mnemonicParsing="false" onAction="#zoomOutItemAction" text="Zoom out" />
+                <Button fx:id="importCategoryButton" mnemonicParsing="false" onAction="#importCategoryItemAction" stylesheets="@stylesheets/buttons.css">
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/import-file-24.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip style="-fx-show-delay: 100ms;" text="Import category..." />
+                     </tooltip></Button>
+                  <Button fx:id="importCategoriesButton" mnemonicParsing="false" onAction="#importCategoriesItemAction" stylesheets="@stylesheets/buttons.css">
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/import-from-folder-24.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip style="-fx-show-delay: 100ms;" text="Import categories..." />
+                     </tooltip></Button>
+                  <Button fx:id="exportButton" mnemonicParsing="false" onAction="#exportItemAction" stylesheets="@stylesheets/buttons.css">
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/xls-export-24.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <tooltip>
+                        <Tooltip style="-fx-show-delay: 100ms;" text="Export to XLS file..." />
+                     </tooltip></Button>
+                  <Separator orientation="VERTICAL" stylesheets="@stylesheets/separators.css" />
+                  <Button fx:id="removeSelectedCategoryButton" mnemonicParsing="false" onAction="#removeSelectedCategoryItemAction" stylesheets="@stylesheets/buttons.css">
+                     <tooltip>
+                        <Tooltip style="-fx-show-delay: 100ms;" text="Remove category" />
+                     </tooltip>
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/delete-category-24.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button fx:id="clearAllButton" mnemonicParsing="false" onAction="#clearAllItemAction" stylesheets="@stylesheets/buttons.css">
+                     <tooltip>
+                        <Tooltip style="-fx-show-delay: 100ms;" text="Clear all" />
+                     </tooltip>
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/clear-all-24.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Separator orientation="VERTICAL" prefHeight="28.0" prefWidth="0.0" stylesheets="@stylesheets/separators.css" />
+                  <Button fx:id="buildAllButton" mnemonicParsing="false" onAction="#buildAllItemAction" stylesheets="@stylesheets/buttons.css">
+                     <tooltip>
+                        <Tooltip style="-fx-show-delay: 100ms;" text="Build all" />
+                     </tooltip>
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/build-24.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Separator orientation="VERTICAL" stylesheets="@stylesheets/separators.css" />
+                  <Button fx:id="zoomOut" mnemonicParsing="false" onAction="#zoomOutItemAction" stylesheets="@stylesheets/buttons.css">
+                     <tooltip>
+                        <Tooltip text="Zoom out" />
+                     </tooltip>
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/zoom-out-24.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
+                  <Button fx:id="zoomInButton" mnemonicParsing="false" onAction="#zoomInItemAction" stylesheets="@stylesheets/buttons.css">
+                     <tooltip>
+                        <Tooltip style="-fx-show-delay: 100ms;" text="Zoom in" />
+                     </tooltip>
+                     <graphic>
+                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@icons/zoom-in-24.png" />
+                           </image>
+                        </ImageView>
+                     </graphic></Button>
               </items>
             </ToolBar>
          </children>
@@ -102,7 +241,7 @@
                      <children>
                         <ScrollPane layoutX="250.0" layoutY="241.0" minHeight="0.0" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                            <content>
-                              <GridPane fx:id="bracketGridPane" gridLinesVisible="true" prefHeight="209.0" prefWidth="272.0">
+                              <GridPane fx:id="bracketGridPane" prefHeight="209.0" prefWidth="272.0">
                                 <columnConstraints>
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                                   <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />

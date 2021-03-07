@@ -1,0 +1,15 @@
+.menu:hover {
+    -fx-background-color: #CCCCCC;
+}
+
+.menu-item:focused {
+     -fx-background-color: #CCCCCC;
+}
+
+.menu:showing {
+    -fx-background-color: #CCCCCC;
+}
+
+.menu .label {
+    -fx-text-fill: black;
+}

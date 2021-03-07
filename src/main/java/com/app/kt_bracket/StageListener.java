@@ -3,6 +3,7 @@ package com.app.kt_bracket;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
@@ -42,6 +43,7 @@ public class StageListener implements ApplicationListener<StageReadyEvent>
             Scene scene = new Scene(root, 1280, 960);
             stage.setScene(scene);
             stage.setTitle(this.applicationTitle);
+            stage.getIcons().add(new Image("icons/kt-bracket-60.png"));
             stage.show();
         }
         catch(IOException e) { throw new RuntimeException(e); }
