@@ -105,13 +105,16 @@ public class MainUIController
         if ( System.getProperty("os.name").contains("Windows") )
             fileChooser.setInitialDirectory(new File("C:\\Users"));
 
-        File fileWithCategory = fileChooser.showOpenDialog(null);
-        List<String> competitorStringsList = new ArrayList<>();
+        File file = fileChooser.showOpenDialog(null);
+        List<String> persons = new ArrayList<>();
 
-        if ( fileWithCategory == null ) return;
+        if ( file == null ) return;
+        if ( file.isDirectory() ) return;
 
-        try{
-            FileReader fileReader = new FileReader(fileWithCategory);
+        try {
+            if ( !Files.probeContentType(Path.of(file.getAbsolutePath())).equals(MediaType.TEXT_PLAIN_VALUE) ) return;
+
+            FileReader fileReader = new FileReader(file, StandardCharsets.UTF_8);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
             String line = null;
@@ -124,17 +127,15 @@ public class MainUIController
                     if ( parts.length > 1 )
                         person = person + " " + parts[1];
 
-                    competitorStringsList.add(person);
+                    persons.add(person);
                 }
             }
         }
         catch(FileNotFoundException e) { e.printStackTrace(); }
         catch(IOException e) { e.printStackTrace(); }
 
-        Category category = categoryBuilder.build(competitorStringsList, new SimpleStringProperty(fileWithCategory.getName()));
-
-        Bracket bracket = bracketBuilder.build(category);
-        bracketDrawer.draw(bracket, bracketGridPane);
+        categories.add( categoryBuilder.build(persons, new SimpleStringProperty(file.getName())) );
+        categoryListDrawer.draw(categories, categoriesTreeTableView);
     }
 
     public void importCategoriesItemAction(ActionEvent actionEvent)
@@ -159,7 +160,7 @@ public class MainUIController
 
                     FileReader fileReader = new FileReader(file, StandardCharsets.UTF_8);
                     BufferedReader bufferedReader = new BufferedReader(fileReader);
-                    List<Competitor> competitors = new ArrayList<>();
+                    List<String> persons = new ArrayList<>();
 
                     String line = null;
                     while ( (line = bufferedReader.readLine()) != null )
@@ -172,16 +173,12 @@ public class MainUIController
                                 person = person + " " + parts[1];
 
                             if ( !person.isBlank() )
-                                competitors.add(new Competitor(person));
+                                persons.add(person);
                         }
                     }
 
-                    if ( competitors.size() > 1 )
-                    {
-                        Category category = new Category(competitors);
-                        category.setName(file.getName());
-                        categories.add(category);
-                    }
+                    if ( persons.size() > 1 )
+                        categories.add( categoryBuilder.build(persons, new SimpleStringProperty(file.getName())) );
 
                     fileReader.close();
                 }
