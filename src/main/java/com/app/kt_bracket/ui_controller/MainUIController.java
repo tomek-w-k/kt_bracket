@@ -27,6 +27,7 @@ import org.springframework.stereotype.Component;
 
 import java.awt.*;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
@@ -156,7 +157,7 @@ public class MainUIController
                 try {
                     if ( !Files.probeContentType(Path.of(file.getAbsolutePath())).equals(MediaType.TEXT_PLAIN_VALUE) ) return;
 
-                    FileReader fileReader = new FileReader(file);
+                    FileReader fileReader = new FileReader(file, StandardCharsets.UTF_8);
                     BufferedReader bufferedReader = new BufferedReader(fileReader);
                     List<Competitor> competitors = new ArrayList<>();
 
@@ -181,6 +182,8 @@ public class MainUIController
                         category.setName(file.getName());
                         categories.add(category);
                     }
+
+                    fileReader.close();
                 }
                 catch(FileNotFoundException e) { e.printStackTrace(); }
                 catch(IOException e) { e.printStackTrace(); }
