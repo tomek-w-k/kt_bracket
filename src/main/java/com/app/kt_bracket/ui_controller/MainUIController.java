@@ -53,6 +53,12 @@ public class MainUIController
     @FXML
     private TreeTableColumn categoryColumn;
 
+    @FXML
+    public Label categoryNameBracketLabel;
+
+    @FXML
+    public Label competitorsNumberBracketLabel;
+
     List<Category> categories = new ArrayList<>();
     Mat mat;
     double bracketGridPaneScale = 1;
@@ -70,7 +76,16 @@ public class MainUIController
             if ( mat != null && t1 != null)
             {
                 mat.findBracketByCategoryName( t1.getValue().getFullName() )
-                        .ifPresent(bracket -> bracketDrawer.draw( bracket, bracketGridPane ));
+                    .ifPresentOrElse(bracket -> {
+                        categoryNameBracketLabel.setText(bracket.getCategoryName());
+                        competitorsNumberBracketLabel.setText("Competitors: " + t1.getChildren().size());
+                        bracketDrawer.draw(bracket, bracketGridPane);
+                    },
+                    () -> {
+                        categoryNameBracketLabel.setText("No bracket generated for this item");
+                        competitorsNumberBracketLabel.setText("");
+                        bracketDrawer.clear(bracketGridPane);
+                    });
 
                 this.bracketGridPaneScale = 1;
                 this.bracketGridPane.setScaleX(this.bracketGridPaneScale);
@@ -78,6 +93,7 @@ public class MainUIController
                 bracketGridPane.setTranslateX( ((this.bracketGridPane.getWidth() - this.bracketGridPane.getWidth() * bracketGridPaneScale) / 2)  * -1 );
                 bracketGridPane.setTranslateY( ((this.bracketGridPane.getHeight() - this.bracketGridPane.getHeight() * bracketGridPaneScale) / 2)   * -1 );
             }
+            else categoryNameBracketLabel.setText("No bracket generated for this item");
         });
     }
 

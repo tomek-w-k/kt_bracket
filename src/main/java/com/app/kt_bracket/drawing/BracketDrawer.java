@@ -250,4 +250,9 @@ public class BracketDrawer
             });
 
     }
+
+    public void clear(GridPane bracketGridPane)
+    {
+        bracketGridPane.getChildren().clear();
+    }
 }
