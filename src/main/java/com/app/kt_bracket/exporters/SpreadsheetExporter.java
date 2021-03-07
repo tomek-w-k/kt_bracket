@@ -3,13 +3,8 @@ package com.app.kt_bracket.exporters;
 import com.app.kt_bracket.structure.Mat;
 import javafx.stage.DirectoryChooser;
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.sl.usermodel.ShapeType;
 import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.util.Units;
-import org.apache.poi.xssf.usermodel.*;
-import org.openxmlformats.schemas.drawingml.x2006.main.*;
 import org.springframework.stereotype.Component;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -24,23 +19,33 @@ public class SpreadsheetExporter
 {
     public void exportToXlsx(Mat mat)
     {
-        Workbook workbook = new HSSFWorkbook();
+        DirectoryChooser directoryChooser = new DirectoryChooser();
 
-        CellStyle initialStyle = workbook.createCellStyle();
-        initialStyle.setFillForegroundColor(IndexedColors.WHITE.getIndex());
-        initialStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-        initialStyle.setWrapText(true);
+        if ( System.getProperty("os.name").contains("Linux") )
+            directoryChooser.setInitialDirectory(new File("/home/ubuntu/pliki_robocze/"));
+        if ( System.getProperty("os.name").contains("Windows") )
+            directoryChooser.setInitialDirectory(new File("C:\\Users"));
 
-        CellStyle competitorStyle = workbook.createCellStyle();
-        competitorStyle.setBorderTop(BorderStyle.THIN);
-        competitorStyle.setBorderBottom(BorderStyle.THIN);
-        competitorStyle.setBorderLeft(BorderStyle.THIN);
-        competitorStyle.setBorderRight(BorderStyle.THIN);
-        competitorStyle.setWrapText(true);
+        File currDir = directoryChooser.showDialog(null);
+        if ( currDir == null ) return;
 
         mat.getBrackets().stream()
             .forEach(bracket -> {
-                Sheet sheet = workbook.createSheet(bracket.getCategoryName());
+                Workbook workbook = new HSSFWorkbook();
+
+                CellStyle initialStyle = workbook.createCellStyle();
+                initialStyle.setFillForegroundColor(IndexedColors.WHITE.getIndex());
+                initialStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+                initialStyle.setWrapText(true);
+
+                CellStyle competitorStyle = workbook.createCellStyle();
+                competitorStyle.setBorderTop(BorderStyle.THIN);
+                competitorStyle.setBorderBottom(BorderStyle.THIN);
+                competitorStyle.setBorderLeft(BorderStyle.THIN);
+                competitorStyle.setBorderRight(BorderStyle.THIN);
+                competitorStyle.setWrapText(true);
+
+                Sheet sheet = workbook.createSheet("category");
                 HSSFPatriarch patriarch = (HSSFPatriarch) sheet.createDrawingPatriarch();
 
                 List<Row> rows = new ArrayList<>();
@@ -139,29 +144,19 @@ public class SpreadsheetExporter
                                 winnerVerticalLine.setLineStyle(HSSFShape.LINESTYLE_SOLID);
                             });
                     });
+
+                String path = currDir.getAbsolutePath();
+                String fileLocation = path + "/" + bracket.getCategoryName().replace(".txt" , "") + ".xls";
+
+                FileOutputStream outputStream = null;
+                try {
+                    outputStream = new FileOutputStream(fileLocation);
+                    workbook.write(outputStream);
+                    workbook.close();
+                    outputStream.close();
+                }
+                catch (FileNotFoundException e) { e.printStackTrace(); }
+                catch (IOException e) { e.printStackTrace(); }
             });
-
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-
-        if ( System.getProperty("os.name").contains("Linux") )
-            directoryChooser.setInitialDirectory(new File("/home/ubuntu/pliki_robocze/"));
-        if ( System.getProperty("os.name").contains("Windows") )
-            directoryChooser.setInitialDirectory(new File("C:\\Users"));
-
-        File currDir = directoryChooser.showDialog(null);
-        if ( currDir == null ) return;
-
-        String path = currDir.getAbsolutePath();
-        String fileLocation = path + "/temp.xlsx";
-
-        FileOutputStream outputStream = null;
-        try {
-            outputStream = new FileOutputStream(fileLocation);
-            workbook.write(outputStream);
-            workbook.close();
-        }
-        catch (FileNotFoundException e) { e.printStackTrace(); }
-        catch (IOException e) { e.printStackTrace(); }
-
     }
 }
