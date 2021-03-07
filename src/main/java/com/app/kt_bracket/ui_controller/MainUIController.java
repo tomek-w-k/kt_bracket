@@ -82,7 +82,7 @@ public class MainUIController
         catch(IllegalStateException e) { e.printStackTrace(); }
 
         categoriesTreeTableView.getSelectionModel().selectedItemProperty().addListener((observableValue, competitorTreeItem, t1) -> {
-            if ( mat != null )
+            if ( mat != null && t1 != null)
             {
                 mat.findBracketByCategoryName( t1.getValue().getFullName() )
                         .ifPresent(bracket -> bracketDrawer.draw( bracket, bracketGridPane ));
