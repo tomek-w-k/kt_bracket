@@ -17,7 +17,7 @@ import java.util.stream.IntStream;
 @Component
 public class SpreadsheetExporter
 {
-    public void exportToXlsx(Mat mat)
+    public void exportToXls(Mat mat)
     {
         DirectoryChooser directoryChooser = new DirectoryChooser();
 
@@ -27,7 +27,9 @@ public class SpreadsheetExporter
             directoryChooser.setInitialDirectory(new File("C:\\Users"));
 
         File currDir = directoryChooser.showDialog(null);
+
         if ( currDir == null ) return;
+        if ( mat == null || mat.getBrackets().isEmpty() ) return;
 
         mat.getBrackets().stream()
             .forEach(bracket -> {

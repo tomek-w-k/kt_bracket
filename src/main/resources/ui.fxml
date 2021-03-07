@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane prefHeight="960.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.kt_bracket.ui_controller.MainUIController">
+<BorderPane prefHeight="768.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/15.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.app.kt_bracket.ui_controller.MainUIController">
    <top>
       <VBox BorderPane.alignment="CENTER">
          <children>
@@ -32,18 +32,24 @@
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem fx:id="exportMenuItem" mnemonicParsing="false" onAction="#exportItemAction" text="Export..." />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                    <MenuItem fx:id="closeMenuItem" mnemonicParsing="false" text="Close" />
+                    <MenuItem fx:id="closeMenuItem" mnemonicParsing="false" onAction="#closeItemAction" text="Close" />
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Shuffle">
-                  <items>
-                    <MenuItem fx:id="shuffleSelectedMenuItem" mnemonicParsing="false" text="Shuffle selected" />
-                        <MenuItem fx:id="shuffleAllMenuItem" mnemonicParsing="false" onAction="#shuffleAllItemAction" text="Shuffle all" />
-                  </items>
-                </Menu>
-                  <Menu mnemonicParsing="false" text="Number">
+                  <Menu mnemonicParsing="false" text="Category">
                     <items>
-                      <MenuItem fx:id="numberAllMenuItem" mnemonicParsing="false" text="Number all" />
+                      <MenuItem fx:id="removeSelectedCategoryMenuItem" mnemonicParsing="false" onAction="#removeSelectedCategoryItemAction" text="Remove selected" />
+                        <MenuItem fx:id="clearAllMenuItem" mnemonicParsing="false" onAction="#clearAllItemAction" text="Clear all" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="Build">
+                    <items>
+                      <MenuItem fx:id="buildAllMenuItem" mnemonicParsing="false" onAction="#buildAllItemAction" text="Build all" />
+                    </items>
+                  </Menu>
+                  <Menu mnemonicParsing="false" text="View">
+                    <items>
+                      <MenuItem fx:id="zoomInMenuItem" mnemonicParsing="false" onAction="#zoomInItemAction" text="Zoom in" />
+                        <MenuItem fx:id="zoomOutMenuItem" mnemonicParsing="false" onAction="#zoomOutItemAction" text="Zoom out" />
                     </items>
                   </Menu>
                 <Menu mnemonicParsing="false" text="Help">
@@ -59,13 +65,12 @@
               <items>
                 <Button fx:id="importCategoryButton" mnemonicParsing="false" onAction="#importCategoryItemAction" text="Import category" />
                   <Button fx:id="importCategoriesButton" mnemonicParsing="false" onAction="#importCategoriesItemAction" text="Import categories" />
-                  <Separator orientation="VERTICAL" />
                   <Button fx:id="exportButton" mnemonicParsing="false" onAction="#exportItemAction" text="Export..." />
                   <Separator orientation="VERTICAL" />
-                  <Button fx:id="shuffleSelectedButton" mnemonicParsing="false" text="Shuffle selected" />
-                  <Button fx:id="shuffleAllButton" mnemonicParsing="false" onAction="#shuffleAllItemAction" text="Shuffle all" />
-                  <Separator orientation="VERTICAL" />
-                  <Button fx:id="numberAllButton" mnemonicParsing="false" onAction="#numberAllItemAction" text="Number all" />
+                  <Button fx:id="removeSelectedCategoryButton" mnemonicParsing="false" onAction="#removeSelectedCategoryItemAction" text="Remove category" />
+                  <Button fx:id="clearAllButton" mnemonicParsing="false" onAction="#clearAllItemAction" text="Clear all" />
+                  <Separator orientation="VERTICAL" prefHeight="28.0" prefWidth="0.0" />
+                  <Button fx:id="buildAllButton" mnemonicParsing="false" onAction="#buildAllItemAction" text="Build all" />
                   <Separator orientation="VERTICAL" />
                   <Button fx:id="zoomInButton" mnemonicParsing="false" onAction="#zoomInItemAction" text="Zoom in" />
                   <Button fx:id="zoomOut" mnemonicParsing="false" onAction="#zoomOutItemAction" text="Zoom out" />

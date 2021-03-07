@@ -27,6 +27,8 @@ public class Numberer
     {
         this.mat = mat;
 
+        if ( mat == null || mat.getBrackets().isEmpty() ) return;
+
         sortBracketDesc()
         .countAllFights()
         .assignFightNumbers();
