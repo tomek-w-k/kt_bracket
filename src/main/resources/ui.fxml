@@ -113,9 +113,23 @@
                   </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                   <items>
-                        <MenuItem fx:id="manualMenuItem" mnemonicParsing="false" text="Manual" />
+                        <MenuItem fx:id="manualMenuItem" mnemonicParsing="false" text="User's manual">
+                           <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/user-manual-24.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
                         <SeparatorMenuItem mnemonicParsing="false" />
-                    <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" text="About" />
+                    <MenuItem fx:id="aboutMenuItem" mnemonicParsing="false" onAction="#aboutMenuItemAction" text="About">
+                           <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@icons/info-24.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic></MenuItem>
                   </items>
                 </Menu>
               </menus>
