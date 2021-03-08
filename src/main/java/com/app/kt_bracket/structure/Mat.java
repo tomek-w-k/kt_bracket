@@ -21,8 +21,8 @@ public class Mat
     public Optional<Bracket> findBracketByCategoryName(String categoryName)
     {
         return brackets.stream()
-            .filter(bracket -> bracket.getCategoryName() == categoryName)
-            .reduce((u, v) -> {throw new IllegalStateException(""); });
+            .filter(bracket -> bracket.getCategoryName().equals(categoryName))
+            .findAny();
     }
 
     public List<Bracket> getBrackets()

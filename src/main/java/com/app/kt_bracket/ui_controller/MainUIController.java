@@ -6,14 +6,12 @@ import com.app.kt_bracket.drawing.CategoryListDrawer;
 import com.app.kt_bracket.exporters.SpreadsheetExporter;
 import com.app.kt_bracket.importers.TextFileImporter;
 import com.app.kt_bracket.logic.BracketBuilder;
-import com.app.kt_bracket.logic.CategoryBuilder;
 import com.app.kt_bracket.logic.Numberer;
 import com.app.kt_bracket.structure.Competitor;
 import com.app.kt_bracket.structure.Mat;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,10 +52,16 @@ public class MainUIController
     private TreeTableColumn categoryColumn;
 
     @FXML
-    public Label categoryNameBracketLabel;
+    private Label categoryNameBracketLabel;
 
     @FXML
-    public Label competitorsNumberBracketLabel;
+    private Label competitorsNumberBracketLabel;
+
+    @FXML
+    private Label messageStatusBarLabel;
+
+    @FXML
+    private Label categoriesStatusBarLabel;
 
     List<Category> categories = new ArrayList<>();
     Mat mat;
@@ -66,6 +70,8 @@ public class MainUIController
     @FXML
     public void initialize()
     {
+        categoryNameBracketLabel.setText("No brackets builded");
+
         try {
             categoryColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("fullName"));
         }
@@ -76,16 +82,8 @@ public class MainUIController
             if ( mat != null && t1 != null)
             {
                 mat.findBracketByCategoryName( t1.getValue().getFullName() )
-                    .ifPresentOrElse(bracket -> {
-                        categoryNameBracketLabel.setText(bracket.getCategoryName());
-                        competitorsNumberBracketLabel.setText("Competitors: " + t1.getChildren().size());
-                        bracketDrawer.draw(bracket, bracketGridPane);
-                    },
-                    () -> {
-                        categoryNameBracketLabel.setText("No bracket generated for this item");
-                        competitorsNumberBracketLabel.setText("");
-                        bracketDrawer.clear(bracketGridPane);
-                    });
+                    .ifPresentOrElse(bracket -> bracketDrawer.draw(bracket, bracketGridPane),
+                                    () -> bracketDrawer.clear(bracketGridPane) );
 
                 this.bracketGridPaneScale = 1;
                 this.bracketGridPane.setScaleX(this.bracketGridPaneScale);
@@ -93,7 +91,6 @@ public class MainUIController
                 bracketGridPane.setTranslateX( ((this.bracketGridPane.getWidth() - this.bracketGridPane.getWidth() * bracketGridPaneScale) / 2)  * -1 );
                 bracketGridPane.setTranslateY( ((this.bracketGridPane.getHeight() - this.bracketGridPane.getHeight() * bracketGridPaneScale) / 2)   * -1 );
             }
-            else categoryNameBracketLabel.setText("No bracket generated for this item");
         });
     }
 
@@ -130,6 +127,7 @@ public class MainUIController
                 .map(category -> bracketBuilder.build(category)).collect(Collectors.toList()));
         numberer.number(mat);
         categoryListDrawer.drawSortedAfterNumbering(categories, mat, categoriesTreeTableView);
+        categoriesTreeTableView.getSelectionModel().selectFirst();
     }
 
     public void zoomInItemAction(ActionEvent actionEvent)
@@ -155,5 +153,31 @@ public class MainUIController
     public void closeItemAction(ActionEvent actionEvent)
     {
 
+    }
+
+    // - - - getters - - -
+    public Label getCategoryNameBracketLabel()
+    {
+        return categoryNameBracketLabel;
+    }
+
+    public Label getCompetitorsNumberBracketLabel()
+    {
+        return competitorsNumberBracketLabel;
+    }
+
+    public Label getMessageStatusBarLabel()
+    {
+        return messageStatusBarLabel;
+    }
+
+    public Label getCategoriesStatusBarLabel()
+    {
+        return categoriesStatusBarLabel;
+    }
+
+    public List<Category> getCategories()
+    {
+        return categories;
     }
 }

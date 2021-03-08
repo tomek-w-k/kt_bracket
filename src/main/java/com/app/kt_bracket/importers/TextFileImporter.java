@@ -16,6 +16,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 
 @Component
@@ -25,7 +26,7 @@ public class TextFileImporter
     CategoryBuilder categoryBuilder;
 
 
-    public void importCategory(List<Category> categories)
+    public boolean importCategory(List<Category> categories)
     {
         FileChooser fileChooser = new FileChooser();
 
@@ -37,11 +38,11 @@ public class TextFileImporter
         File file = fileChooser.showOpenDialog(null);
         List<String> persons = new ArrayList<>();
 
-        if ( file == null ) return;
-        if ( file.isDirectory() ) return;
+        if ( file == null ) return false;
+        if ( file.isDirectory() ) return false;
 
         try {
-            if ( !Files.probeContentType(Path.of(file.getAbsolutePath())).equals(MediaType.TEXT_PLAIN_VALUE) ) return;
+            if ( !Files.probeContentType(Path.of(file.getAbsolutePath())).equals(MediaType.TEXT_PLAIN_VALUE) ) return false;
 
             FileReader fileReader = new FileReader(file, StandardCharsets.UTF_8);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
@@ -64,9 +65,11 @@ public class TextFileImporter
         catch(IOException e) { e.printStackTrace(); }
 
         categories.add( categoryBuilder.build(persons, new SimpleStringProperty(file.getName())) );
+
+        return true;
     }
 
-    public void importCategories(List<Category> categories)
+    public boolean importCategories(List<Category> categories)
     {
         DirectoryChooser directoryChooser = new DirectoryChooser();
 
@@ -77,8 +80,9 @@ public class TextFileImporter
 
         File directoryWithCategories = directoryChooser.showDialog(null);
 
-        if ( directoryWithCategories == null ) return;
+        if ( directoryWithCategories == null ) return false;
 
+        AtomicBoolean categoriesImported = new AtomicBoolean(false);
         Arrays.asList(directoryWithCategories.listFiles()).stream()
             .forEach(file -> {
                 if ( file.isDirectory() ) return;
@@ -106,12 +110,17 @@ public class TextFileImporter
                     }
 
                     if ( persons.size() > 1 )
+                    {
                         categories.add( categoryBuilder.build(persons, new SimpleStringProperty(file.getName())) );
+                        categoriesImported.set(true);
+                    }
 
                     fileReader.close();
                 }
                 catch(FileNotFoundException e) { e.printStackTrace(); }
                 catch(IOException e) { e.printStackTrace(); }
             });
+
+        return categoriesImported.get();
     }
 }

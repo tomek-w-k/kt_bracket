@@ -81,7 +81,7 @@
                   </Menu>
                   <Menu mnemonicParsing="false" text="Build">
                     <items>
-                      <MenuItem fx:id="buildAllMenuItem" mnemonicParsing="false" onAction="#buildAllItemAction" text="Build all">
+                      <MenuItem fx:id="buildAllMenuItem" mnemonicParsing="false" onAction="#buildAllItemAction" text="Build">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
@@ -181,7 +181,7 @@
                   <Separator orientation="VERTICAL" prefHeight="28.0" prefWidth="0.0" stylesheets="@stylesheets/separators.css" />
                   <Button fx:id="buildAllButton" mnemonicParsing="false" onAction="#buildAllItemAction" stylesheets="@stylesheets/buttons.css">
                      <tooltip>
-                        <Tooltip style="-fx-show-delay: 100ms;" text="Build all" />
+                        <Tooltip style="-fx-show-delay: 100ms;" text="Build" />
                      </tooltip>
                      <graphic>
                         <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
@@ -244,7 +244,7 @@
                            </rowConstraints>
                            <children>
                               <Label fx:id="categoryNameBracketLabel" prefHeight="25.0" />
-                              <Label fx:id="competitorsNumberBracketLabel" alignment="BASELINE_RIGHT" contentDisplay="RIGHT" prefHeight="25.0" textAlignment="CENTER" GridPane.columnIndex="1" />
+                              <Label fx:id="competitorsNumberBracketLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="25.0" textAlignment="CENTER" GridPane.columnIndex="1" />
                            </children>
                         </GridPane>
                      </children>
@@ -271,4 +271,23 @@
         </items>
       </SplitPane>
    </center>
+   <bottom>
+      <AnchorPane BorderPane.alignment="CENTER">
+         <children>
+            <GridPane AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="7.0" AnchorPane.rightAnchor="7.0" AnchorPane.topAnchor="0.0">
+               <columnConstraints>
+                  <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="RIGHT" hgrow="NEVER" minWidth="10.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints minHeight="10.0" vgrow="SOMETIMES" />
+               </rowConstraints>
+               <children>
+                  <Label fx:id="messageStatusBarLabel" prefHeight="25.0" />
+                  <Label fx:id="categoriesStatusBarLabel" alignment="CENTER_RIGHT" contentDisplay="RIGHT" prefHeight="25.0" GridPane.columnIndex="1" />
+               </children>
+            </GridPane>
+         </children>
+      </AnchorPane>
+   </bottom>
 </BorderPane>
