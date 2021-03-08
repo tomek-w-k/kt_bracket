@@ -71,7 +71,7 @@ public class MainUIController
     @FXML
     public void initialize()
     {
-        categoryNameBracketLabel.setText("No brackets builded");
+        categoryListDrawer.clearAll(categories, categoriesTreeTableView, mat);
 
         try {
             categoryColumn.setCellValueFactory(new TreeItemPropertyValueFactory<>("fullName"));
@@ -115,12 +115,18 @@ public class MainUIController
 
     public void removeSelectedCategoryItemAction(ActionEvent actionEvent)
     {
+        if ( categories.size() == 1 ) // when last element is being removed...
+        {
+            categoryListDrawer.clearAll(categories, categoriesTreeTableView, mat);
+            return;
+        }
+
         categoryListDrawer.remove(categoriesTreeTableView.getSelectionModel().getSelectedIndex(), categories, categoriesTreeTableView, mat);
     }
 
     public void clearAllItemAction(ActionEvent actionEvent)
     {
-
+        categoryListDrawer.clearAll(categories, categoriesTreeTableView, mat);
     }
 
     public void buildAllItemAction(ActionEvent actionEvent)

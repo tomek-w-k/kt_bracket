@@ -54,16 +54,32 @@ public class CategoryListDrawer
 
     public boolean remove(int index, List<Category> categories, TreeTableView<Competitor> categoriesTreeTableView, Mat mat)
     {
+        int selectedIndex = categoriesTreeTableView.getSelectionModel().getSelectedIndex();
+
         if ( !categories.isEmpty() )
         {
             if ( mat != null && !mat.getBrackets().isEmpty() )
-                mat.getBrackets().remove(categoriesTreeTableView.getSelectionModel().getSelectedIndex());
+                if ( mat.getBrackets().size() > selectedIndex )
+                    mat.getBrackets().remove(selectedIndex);
 
-            categories.remove(categoriesTreeTableView.getSelectionModel().getSelectedIndex());
+            categories.remove(selectedIndex);
             this.draw(categories, categoriesTreeTableView);
-            categoriesTreeTableView.getSelectionModel().selectFirst();
+
+            if ( selectedIndex == categories.size() )
+                categoriesTreeTableView.getSelectionModel().selectLast();
+
+            categoriesTreeTableView.getSelectionModel().select(selectedIndex);
             return true;
         }
         else return false;
+    }
+
+    public void clearAll(List<Category> categories, TreeTableView<Competitor> categoriesTreeTableView, Mat mat)
+    {
+        if ( mat != null && !mat.getBrackets().isEmpty() )
+            mat.getBrackets().clear();
+
+        categoriesTreeTableView.setRoot(null);
+        categories.clear();
     }
 }

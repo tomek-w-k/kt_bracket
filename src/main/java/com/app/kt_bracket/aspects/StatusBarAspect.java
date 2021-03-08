@@ -34,6 +34,14 @@ public class StatusBarAspect
         bracketsNeedRebuild(categoryRemoved);
     }
 
+    @After("execution(* com.app.kt_bracket.drawing.CategoryListDrawer.clearAll(..))")
+    public void onClearAll()
+    {
+        mainUIController.getCategoryNameBracketLabel().setText("No brackets builded");
+        mainUIController.getMessageStatusBarLabel().setText("");
+        mainUIController.getCategoriesStatusBarLabel().setText("");
+    }
+
     // - - - private methods - - -
     private void bracketsNeedRebuild(boolean stateChanged)
     {
