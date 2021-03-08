@@ -7,6 +7,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,17 +37,33 @@ public class CategoryListDrawer
     public void drawSortedAfterNumbering(List<Category> categories, Mat mat, TreeTableView<Competitor> categoriesTreeTableView)
     {
         // sort categories to display them in the order corresponding to order of brackets in the mat
-        List<Category> sortedCategories = mat.getBrackets().stream()
-                .map(bracket -> {
-                    return categories.stream()
-                        .filter(category -> category.getName() == bracket.getCategoryName())
-                        .reduce((u, v) -> {throw new IllegalStateException("");})
-                        .get();
-                }).collect(Collectors.toList());
+        List<Category> unsortedCategories = new ArrayList<>(categories);
+        categories.clear();
+        mat.getBrackets().stream()
+            .forEach(bracket -> categories.add(unsortedCategories.stream()
+                .filter(category -> category.getName().equals(bracket.getCategoryName()))
+                .findAny()
+                .orElseThrow()
+            ));
 
-        sortedCategories.stream()
-                .forEach(category -> category.getCompetitorList().removeIf(competitor -> competitor.isEmpty()));
+        categories.stream()
+            .forEach(category -> category.getCompetitorList().removeIf(competitor -> competitor.isEmpty()));
 
-        this.draw(sortedCategories, categoriesTreeTableView);
+        this.draw(categories, categoriesTreeTableView);
+    }
+
+    public boolean remove(int index, List<Category> categories, TreeTableView<Competitor> categoriesTreeTableView, Mat mat)
+    {
+        if ( !categories.isEmpty() )
+        {
+            if ( mat != null && !mat.getBrackets().isEmpty() )
+                mat.getBrackets().remove(categoriesTreeTableView.getSelectionModel().getSelectedIndex());
+
+            categories.remove(categoriesTreeTableView.getSelectionModel().getSelectedIndex());
+            this.draw(categories, categoriesTreeTableView);
+            categoriesTreeTableView.getSelectionModel().selectFirst();
+            return true;
+        }
+        else return false;
     }
 }

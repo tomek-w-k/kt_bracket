@@ -9,6 +9,7 @@ import com.app.kt_bracket.logic.BracketBuilder;
 import com.app.kt_bracket.logic.Numberer;
 import com.app.kt_bracket.structure.Competitor;
 import com.app.kt_bracket.structure.Mat;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -83,7 +84,7 @@ public class MainUIController
             {
                 mat.findBracketByCategoryName( t1.getValue().getFullName() )
                     .ifPresentOrElse(bracket -> bracketDrawer.draw(bracket, bracketGridPane),
-                                    () -> bracketDrawer.clear(bracketGridPane) );
+                                    () -> bracketDrawer.clear(bracketGridPane));
 
                 this.bracketGridPaneScale = 1;
                 this.bracketGridPane.setScaleX(this.bracketGridPaneScale);
@@ -91,6 +92,7 @@ public class MainUIController
                 bracketGridPane.setTranslateX( ((this.bracketGridPane.getWidth() - this.bracketGridPane.getWidth() * bracketGridPaneScale) / 2)  * -1 );
                 bracketGridPane.setTranslateY( ((this.bracketGridPane.getHeight() - this.bracketGridPane.getHeight() * bracketGridPaneScale) / 2)   * -1 );
             }
+            else bracketDrawer.clear(bracketGridPane);
         });
     }
 
@@ -113,7 +115,7 @@ public class MainUIController
 
     public void removeSelectedCategoryItemAction(ActionEvent actionEvent)
     {
-
+        categoryListDrawer.remove(categoriesTreeTableView.getSelectionModel().getSelectedIndex(), categories, categoriesTreeTableView, mat);
     }
 
     public void clearAllItemAction(ActionEvent actionEvent)
