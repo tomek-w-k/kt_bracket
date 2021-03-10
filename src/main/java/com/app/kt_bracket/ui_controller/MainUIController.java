@@ -10,15 +10,11 @@ import com.app.kt_bracket.logic.Numberer;
 import com.app.kt_bracket.structure.Competitor;
 import com.app.kt_bracket.structure.Mat;
 import com.app.kt_bracket.tools.Helper;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.web.WebView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.*;
@@ -168,6 +164,11 @@ public class MainUIController
     public void closeItemAction(ActionEvent actionEvent)
     {
 
+    }
+
+    public void manualMenuItemAction(ActionEvent actionEvent)
+    {
+        helper.showUsersManual();
     }
 
     public void aboutMenuItemAction(ActionEvent actionEvent)

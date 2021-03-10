@@ -1,9 +1,16 @@
 package com.app.kt_bracket.tools;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
 
 
 @Component
@@ -24,5 +31,23 @@ public class Helper
 
         alert.setContentText(content);
         alert.showAndWait();
+    }
+
+    public void showUsersManual()
+    {
+        Parent manualMainLayout = null;
+        FXMLLoader layoutLoader = new FXMLLoader();
+
+        try {
+            layoutLoader.setLocation(Helper.class.getResource("/manual.fxml"));
+            manualMainLayout = layoutLoader.load();
+        } catch (IOException e) { e.printStackTrace(); }
+
+        Scene scene = new Scene(manualMainLayout, 800, 800);
+        Stage manualWindow = new Stage();
+        manualWindow.setScene(scene);
+        manualWindow.initModality(Modality.WINDOW_MODAL);
+        manualWindow.setTitle("KtBracket - User's manual");
+        manualWindow.showAndWait();
     }
 }

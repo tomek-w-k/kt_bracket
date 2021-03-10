@@ -113,7 +113,7 @@
                   </Menu>
                 <Menu mnemonicParsing="false" text="Help">
                   <items>
-                        <MenuItem fx:id="manualMenuItem" mnemonicParsing="false" text="User's manual">
+                        <MenuItem fx:id="manualMenuItem" mnemonicParsing="false" onAction="#manualMenuItemAction" text="User's manual">
                            <graphic>
                               <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                  <image>
