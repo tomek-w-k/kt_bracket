@@ -163,7 +163,7 @@ public class MainUIController
 
     public void closeItemAction(ActionEvent actionEvent)
     {
-
+        System.exit(0);
     }
 
     public void manualMenuItemAction(ActionEvent actionEvent)

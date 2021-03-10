@@ -21,6 +21,8 @@ public class StageListener implements ApplicationListener<StageReadyEvent>
     private final String applicationTitle;
     private final Resource fxml;
     private final ApplicationContext applicationContext;
+    private Stage stage;
+    private Scene scene;
 
     StageListener(@Value("${spring.application.ui.title}") String applicationTitle,
                   @Value("classpath:/ui.fxml") Resource resource,
@@ -35,12 +37,12 @@ public class StageListener implements ApplicationListener<StageReadyEvent>
     public void onApplicationEvent(StageReadyEvent stageReadyEvent)
     {
         try {
-            Stage stage = stageReadyEvent.getStage();
+            stage = stageReadyEvent.getStage();
             URL url = this.fxml.getURL();
             FXMLLoader fxmlLoader = new FXMLLoader(url);
             fxmlLoader.setControllerFactory(applicationContext::getBean);
             Parent root = fxmlLoader.load();
-            Scene scene = new Scene(root, 1280, 960);
+            scene = new Scene(root, 1280, 960);
             stage.setScene(scene);
             stage.setTitle(this.applicationTitle);
             stage.getIcons().add(new Image("icons/kt-bracket-60.png"));
