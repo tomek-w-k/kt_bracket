@@ -29,11 +29,7 @@ public class TextFileImporter
     public boolean importCategory(List<Category> categories)
     {
         FileChooser fileChooser = new FileChooser();
-
-        if ( System.getProperty("os.name").contains("Linux") )
-            fileChooser.setInitialDirectory(new File("/home/ubuntu/pliki_robocze/"));
-        if ( System.getProperty("os.name").contains("Windows") )
-            fileChooser.setInitialDirectory(new File("C:\\Users"));
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 
         File file = fileChooser.showOpenDialog(null);
         List<String> persons = new ArrayList<>();
@@ -72,11 +68,7 @@ public class TextFileImporter
     public boolean importCategories(List<Category> categories)
     {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-
-        if ( System.getProperty("os.name").contains("Linux") )
-            directoryChooser.setInitialDirectory(new File("/home/ubuntu/pliki_robocze/"));
-        if ( System.getProperty("os.name").contains("Windows") )
-            directoryChooser.setInitialDirectory(new File("C:\\Users"));
+        directoryChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 
         File directoryWithCategories = directoryChooser.showDialog(null);
 

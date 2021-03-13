@@ -20,11 +20,7 @@ public class SpreadsheetExporter
     public void exportToXls(Mat mat)
     {
         DirectoryChooser directoryChooser = new DirectoryChooser();
-
-        if ( System.getProperty("os.name").contains("Linux") )
-            directoryChooser.setInitialDirectory(new File("/home/ubuntu/pliki_robocze/"));
-        if ( System.getProperty("os.name").contains("Windows") )
-            directoryChooser.setInitialDirectory(new File("C:\\Users"));
+        directoryChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 
         File currDir = directoryChooser.showDialog(null);
 

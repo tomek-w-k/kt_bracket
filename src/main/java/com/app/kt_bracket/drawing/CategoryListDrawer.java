@@ -77,7 +77,6 @@ public class CategoryListDrawer
         if ( mat != null && !mat.getBrackets().isEmpty() )
             mat.getBrackets().clear();
 
-        System.out.println("clear all :: " + categoriesTreeTableView);
         categoriesTreeTableView.setRoot(null);
         categories.clear();
     }
