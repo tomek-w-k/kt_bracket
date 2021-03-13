@@ -1,14 +1,16 @@
 package com.app.kt_bracket.structure;
 
+import javafx.scene.layout.GridPane;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class Bracket
 {
-    List<BracketColumn> columns;
-    String categoryName;
-    int numberOfCompetitors;
+    private List<BracketColumn> columns;
+    private String categoryName;
+    private int numberOfCompetitors;
+    private GridPane layoutRepresentation;
 
 
     public Bracket()
@@ -55,5 +57,15 @@ public class Bracket
     public void setNumberOfCompetitors(int numberOfCompetitors)
     {
         this.numberOfCompetitors = numberOfCompetitors;
+    }
+
+    public GridPane getLayoutRepresentation()
+    {
+        return layoutRepresentation;
+    }
+
+    public void setLayoutRepresentation(GridPane layoutRepresentation)
+    {
+        this.layoutRepresentation = layoutRepresentation;
     }
 }

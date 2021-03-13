@@ -37,9 +37,12 @@ public class StatusBarAspect
     @After("execution(* com.app.kt_bracket.drawing.CategoryListDrawer.clearAll(..))")
     public void onClearAll()
     {
-        mainUIController.getCategoryNameBracketLabel().setText("No brackets builded");
-        mainUIController.getMessageStatusBarLabel().setText("");
-        mainUIController.getCategoriesStatusBarLabel().setText("");
+        if ( mainUIController != null )
+        {
+            mainUIController.getCategoryNameBracketLabel().setText("No brackets builded");
+            mainUIController.getMessageStatusBarLabel().setText("");
+            mainUIController.getCategoriesStatusBarLabel().setText("");
+        }
     }
 
     // - - - private methods - - -

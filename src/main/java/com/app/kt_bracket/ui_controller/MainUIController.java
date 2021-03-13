@@ -1,6 +1,7 @@
 package com.app.kt_bracket.ui_controller;
 
 import com.app.kt_bracket.data.Category;
+import com.app.kt_bracket.display.BracketDisplayer;
 import com.app.kt_bracket.drawing.BracketDrawer;
 import com.app.kt_bracket.drawing.CategoryListDrawer;
 import com.app.kt_bracket.exporters.SpreadsheetExporter;
@@ -10,8 +11,10 @@ import com.app.kt_bracket.logic.Numberer;
 import com.app.kt_bracket.structure.Competitor;
 import com.app.kt_bracket.structure.Mat;
 import com.app.kt_bracket.tools.Helper;
+import com.app.kt_bracket.tools.Zoomer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Group;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TreeItemPropertyValueFactory;
 import javafx.scene.layout.*;
@@ -46,8 +49,14 @@ public class MainUIController
     @Autowired
     Helper helper;
 
+    @Autowired
+    Zoomer zoomer;
+
+    @Autowired
+    BracketDisplayer bracketDisplayer;
+
     @FXML
-    GridPane bracketGridPane;
+    public Group bracketPaneGroup;
 
     @FXML
     private TreeTableView<Competitor> categoriesTreeTableView;
@@ -67,9 +76,10 @@ public class MainUIController
     @FXML
     private Label categoriesStatusBarLabel;
 
-    List<Category> categories = new ArrayList<>();
-    Mat mat;
-    double bracketGridPaneScale = 1;
+    private List<Category> categories = new ArrayList<>();
+    private Mat mat;
+    GridPane currentBracketGridPane;
+
 
     @FXML
     public void initialize()
@@ -86,29 +96,31 @@ public class MainUIController
             if ( mat != null && t1 != null)
             {
                 mat.findBracketByCategoryName( t1.getValue().getFullName() )
-                    .ifPresentOrElse(bracket -> bracketDrawer.draw(bracket, bracketGridPane),
-                                    () -> bracketDrawer.clear(bracketGridPane));
-
-                this.bracketGridPaneScale = 1;
-                this.bracketGridPane.setScaleX(this.bracketGridPaneScale);
-                this.bracketGridPane.setScaleY(this.bracketGridPaneScale);
-                bracketGridPane.setTranslateX( ((this.bracketGridPane.getWidth() - this.bracketGridPane.getWidth() * bracketGridPaneScale) / 2)  * -1 );
-                bracketGridPane.setTranslateY( ((this.bracketGridPane.getHeight() - this.bracketGridPane.getHeight() * bracketGridPaneScale) / 2)   * -1 );
+                    .ifPresentOrElse(bracket -> {
+                        currentBracketGridPane = bracket.getLayoutRepresentation();
+                        bracketDisplayer.display(bracket, bracketPaneGroup, zoomer);
+                    }, () -> bracketDisplayer.clear(bracketPaneGroup) );
             }
-            else bracketDrawer.clear(bracketGridPane);
+            else bracketDisplayer.clear(bracketPaneGroup);
         });
     }
 
     public void importCategoryItemAction(ActionEvent actionEvent)
     {
-        textFileImporter.importCategory(categories);
-        categoryListDrawer.draw(categories, categoriesTreeTableView);
+        if ( textFileImporter.importCategory(categories) )
+        {
+            categoryListDrawer.draw(categories, categoriesTreeTableView);
+            categoriesTreeTableView.getSelectionModel().selectFirst();
+        }
     }
 
     public void importCategoriesItemAction(ActionEvent actionEvent)
     {
-        textFileImporter.importCategories(categories);
-        categoryListDrawer.draw(categories, categoriesTreeTableView);
+        if ( textFileImporter.importCategories(categories) )
+        {
+            categoryListDrawer.draw(categories, categoriesTreeTableView);
+            categoriesTreeTableView.getSelectionModel().selectFirst();
+        }
     }
 
     public void exportItemAction(ActionEvent actionEvent)
@@ -130,6 +142,7 @@ public class MainUIController
     public void clearAllItemAction(ActionEvent actionEvent)
     {
         categoryListDrawer.clearAll(categories, categoriesTreeTableView, mat);
+        zoomer.resetBracketGridPaneScale();
     }
 
     public void buildAllItemAction(ActionEvent actionEvent)
@@ -138,27 +151,18 @@ public class MainUIController
                 .map(category -> bracketBuilder.build(category)).collect(Collectors.toList()));
         numberer.number(mat);
         categoryListDrawer.drawSortedAfterNumbering(categories, mat, categoriesTreeTableView);
+        bracketDrawer.drawAll(mat);
         categoriesTreeTableView.getSelectionModel().selectFirst();
     }
 
     public void zoomInItemAction(ActionEvent actionEvent)
     {
-        bracketGridPaneScale = bracketGridPaneScale + 0.05;
-        this.bracketGridPane.setScaleX(this.bracketGridPaneScale);
-        this.bracketGridPane.setScaleY(this.bracketGridPaneScale);
-
-        bracketGridPane.setTranslateX( ((this.bracketGridPane.getWidth() - this.bracketGridPane.getWidth() * bracketGridPaneScale) / 2)  * -1 );
-        bracketGridPane.setTranslateY( ((this.bracketGridPane.getHeight() - this.bracketGridPane.getHeight() * bracketGridPaneScale) / 2)  * -1 );
+        zoomer.zoomIn(currentBracketGridPane);
     }
 
     public void zoomOutItemAction(ActionEvent actionEvent)
     {
-        bracketGridPaneScale = bracketGridPaneScale - 0.05;
-        this.bracketGridPane.setScaleX(this.bracketGridPaneScale);
-        this.bracketGridPane.setScaleY(this.bracketGridPaneScale);
-
-        bracketGridPane.setTranslateX( ((this.bracketGridPane.getWidth() - this.bracketGridPane.getWidth() * bracketGridPaneScale) / 2)  * -1 );
-        bracketGridPane.setTranslateY( ((this.bracketGridPane.getHeight() - this.bracketGridPane.getHeight() * bracketGridPaneScale) / 2)   * -1 );
+        zoomer.zoomOut(currentBracketGridPane);
     }
 
     public void closeItemAction(ActionEvent actionEvent)

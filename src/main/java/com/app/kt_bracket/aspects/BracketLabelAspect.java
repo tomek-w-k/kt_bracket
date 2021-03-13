@@ -16,8 +16,8 @@ public class BracketLabelAspect
     MainUIController mainUIController;
 
 
-    @After("execution(* com.app.kt_bracket.drawing.BracketDrawer.draw(..)) && args(bracket,..)")
-    public void onBracketDrawing(Bracket bracket)
+    @After("execution(* com.app.kt_bracket.display.BracketDisplayer.display(..)) && args(bracket,..)")
+    public void onBracketDisplaying(Bracket bracket)
     {
         String categoryName = bracket.getCategoryName();
 
@@ -28,7 +28,7 @@ public class BracketLabelAspect
             .ifPresent( category -> mainUIController.getCompetitorsNumberBracketLabel().setText("Competitors: " + category.getCompetitorList().size()) );
     }
 
-    @After("execution(* com.app.kt_bracket.drawing.BracketDrawer.clear(..))")
+    @After("execution(* com.app.kt_bracket.display.BracketDisplayer.clear(..))")
     public void onBracketGridPaneClearing()
     {
         mainUIController.getCategoryNameBracketLabel().setText("No bracket generated for this item");

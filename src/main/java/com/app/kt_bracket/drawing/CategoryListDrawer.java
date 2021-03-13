@@ -3,11 +3,9 @@ package com.app.kt_bracket.drawing;
 import com.app.kt_bracket.data.Category;
 import com.app.kt_bracket.structure.Competitor;
 import com.app.kt_bracket.structure.Mat;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableView;
 import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,6 +77,7 @@ public class CategoryListDrawer
         if ( mat != null && !mat.getBrackets().isEmpty() )
             mat.getBrackets().clear();
 
+        System.out.println("clear all :: " + categoriesTreeTableView);
         categoriesTreeTableView.setRoot(null);
         categories.clear();
     }

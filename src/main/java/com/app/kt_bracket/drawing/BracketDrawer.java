@@ -1,6 +1,7 @@
 package com.app.kt_bracket.drawing;
 
 import com.app.kt_bracket.structure.Bracket;
+import com.app.kt_bracket.structure.Mat;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Label;
@@ -11,13 +12,28 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.StrokeLineCap;
 import org.springframework.stereotype.Component;
-
 import java.util.stream.IntStream;
 
 
 @Component
 public class BracketDrawer
 {
+    private static final double COMPETITOR_COLUMN_WIDTH = 200;
+    private static final double FIGHT_NUMBER_COLUMN_WIDTH = 50;
+    private static final double DECORATION_COLUMN_WIDTH = 50;
+    private static final double ROW_HEIGHT = 25;
+
+
+    public void drawAll(Mat mat)
+    {
+        mat.getBrackets().stream()
+            .forEach(bracket -> {
+                GridPane bracketGridPane = new GridPane();
+                this.draw(bracket, bracketGridPane);
+                bracket.setLayoutRepresentation(bracketGridPane);
+            });
+    }
+
     public void draw(Bracket bracket, GridPane bracketGridPane)
     {
         bracketGridPane.getChildren().clear();
@@ -27,20 +43,36 @@ public class BracketDrawer
         if ( bracket.getColumns().size() > 1 )
             IntStream.iterate(0, row -> ++row)
                 .limit(bracket.getColumns().get(1).getFights().size() * 8)
-                .forEach(row -> bracketGridPane.getRowConstraints().add(row, new RowConstraints(25)));
+                .forEach(row -> bracketGridPane.getRowConstraints().add(row, new RowConstraints(ROW_HEIGHT)));
         else
             IntStream.iterate(0, row -> ++row)
                 .limit(3)
-                .forEach(row -> bracketGridPane.getRowConstraints().add(row, new RowConstraints(25)));
+                .forEach(row -> bracketGridPane.getRowConstraints().add(row, new RowConstraints(ROW_HEIGHT)));
 
-        IntStream.iterate(0, col -> ++col)
-            .limit(bracket.getColumns().get( bracket.getColumns().size() -1 ).getFights().get(0).getWinner().getCoordinates().getX() + 1)
-            .forEach(col -> {
-                ColumnConstraints c = new ColumnConstraints(200);
-                c.setFillWidth(true);
-                bracketGridPane.getColumnConstraints().add(col, c);
+        // simpleColumn - a column of a bracketGridPane containing only a part of the fignt, i.e. only competitors, only fight numbers or decorations
+        IntStream.iterate(0, simpleColumnNumber -> simpleColumnNumber + 3)
+            .limit(bracket.getColumns().size())
+            .forEach(simpleColumnNumber -> {
+                ColumnConstraints forCompetitorColumn = new ColumnConstraints(COMPETITOR_COLUMN_WIDTH);
+                forCompetitorColumn.setFillWidth(true);
+                bracketGridPane.getColumnConstraints().add(simpleColumnNumber, forCompetitorColumn);
+
+                ColumnConstraints forFightNumberColumn = new ColumnConstraints(FIGHT_NUMBER_COLUMN_WIDTH);
+                forFightNumberColumn.setFillWidth(true);
+                bracketGridPane.getColumnConstraints().add(simpleColumnNumber + 1, forFightNumberColumn);
+
+                ColumnConstraints forDecorationColumn = new ColumnConstraints(DECORATION_COLUMN_WIDTH);
+                forDecorationColumn.setFillWidth(true);
+                bracketGridPane.getColumnConstraints().add(simpleColumnNumber + 2, forDecorationColumn);
             });
 
+        int bracketWinnerXPos = bracket.getColumns().get( bracket.getColumns().size() -1 ).getFights().get(0).getWinner().getCoordinates().getX();
+
+        ColumnConstraints forBracketWinnerColumn = new ColumnConstraints(COMPETITOR_COLUMN_WIDTH);
+        forBracketWinnerColumn.setFillWidth(true);
+        bracketGridPane.getColumnConstraints().add(bracketWinnerXPos, forBracketWinnerColumn);
+
+        // draw a 0-fight column
         bracket.getColumns().get(0).getFights().stream()
             .forEach(fight -> {
                 Label labelShiro = new Label(fight.getShiro().getFullName());
@@ -52,8 +84,6 @@ public class BracketDrawer
                 AnchorPane.setRightAnchor(labelShiro, .00);
                 bracketGridPane.add(shiroAnchorPane, fight.getShiro().getCoordinates().getX(), fight.getShiro().getCoordinates().getY());
 
-                bracketGridPane.getColumnConstraints().get(fight.getNumberCoordinates().getX()).setPrefWidth(50);
-                bracketGridPane.getColumnConstraints().get(fight.getNumberCoordinates().getX() + 1).setPrefWidth(50);
                 Label labelNumber = new Label(String.valueOf(fight.getNumber()));
                 labelNumber.setStyle("-fx-background-color: lightgray; -fx-border-color: black");
                 AnchorPane numberAnchorPane = new AnchorPane(labelNumber);
@@ -131,6 +161,7 @@ public class BracketDrawer
                 bracketGridPane.add(akaHLine, fight.getDecoration().getAkaHorizontalLine().getX(), fight.getDecoration().getAkaHorizontalLine().getY());
             });
 
+        // draw the rest of the fight columns
         IntStream.iterate(1, col -> ++col)
             .limit(bracket.getColumns().size() - 1)
             .forEach(col -> {
@@ -147,8 +178,6 @@ public class BracketDrawer
                             bracketGridPane.add(shiroAnchorPane, fight.getShiro().getCoordinates().getX(), fight.getShiro().getCoordinates().getY());
                         }
 
-                        bracketGridPane.getColumnConstraints().get(fight.getNumberCoordinates().getX()).setPrefWidth(50);
-                        bracketGridPane.getColumnConstraints().get(fight.getNumberCoordinates().getX() + 1).setPrefWidth(50);
                         Label labelNumber = new Label(String.valueOf(fight.getNumber()));
                         labelNumber.setStyle("-fx-background-color: lightgray; -fx-border-color: black");
                         AnchorPane numberAnchorPane = new AnchorPane(labelNumber);
@@ -248,11 +277,5 @@ public class BracketDrawer
                         bracketGridPane.add(akaHLine, fight.getDecoration().getAkaHorizontalLine().getX(), fight.getDecoration().getAkaHorizontalLine().getY());
                     });
             });
-
-    }
-
-    public void clear(GridPane bracketGridPane)
-    {
-        bracketGridPane.getChildren().clear();
     }
 }
